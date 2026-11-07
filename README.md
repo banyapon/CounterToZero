@@ -1,0 +1,45 @@
+# Count to Zero
+
+เกม Unity 6 แนว arithmetic bullet hell ตามเอกสาร Lucky Number: GLITCH-0 ต่อสู้ OMEGA-99 สามเฟสในสนาม 3D โดยตัวละคร ลูกแก้ว และกระสุนใช้ SpriteRenderer แบบ Billboard Facing Camera
+
+## เปิดเล่น
+
+1. เปิดด้วย Unity **6000.6.7f1**
+2. เปิด `Assets/Scenes/CountToZero.unity` แล้วกด Play → Enter
+3. หากยังไม่มีฉาก เลือกเมนู **Count To Zero → Create Game Scene**
+
+| ปุ่ม | การทำงาน |
+| --- | --- |
+| WASD / ลูกศร | เดินบนระนาบ XZ |
+| เมาส์ + คลิกซ้ายค้าง | เล็งและยิง; ยิงลูกแก้ว + / - เพื่อกลับเครื่องหมาย |
+| J ค้าง | ยิงไปหาบอสโดยไม่ใช้เมาส์ |
+| Space | Dash พร้อมกลับเครื่องหมายค่าตัวเอง, cooldown 3 วินาที |
+| E | Bullet Time 3 วินาที เมื่อเกจจาก Grazing เต็ม |
+| Esc | หยุด / เล่นต่อ |
+| Enter / R | เล่นใหม่หลังจบเกม |
+
+## กติกา
+
+- ค่าเลขของผู้เล่นและบอสแยกจากพลังชีวิต: ผู้เล่น 5 HP; บอส 99 HP แบ่งสามเฟสที่ 66/33/0
+- กฎเปลี่ยนทุก 15 วินาที: exact, even, odd, multiple, prime, greater/less than
+- Exact Match ปล่อยเลเซอร์ ล้างกระสุน และเปลี่ยนกฎทันที; conditional match ให้กระสุนติดตาม 5 วินาที
+- บอสทำ exact match จะหัก HP โดยตรง; conditional match เปิดเกราะสะท้อนและเพิ่มความเร็วกระสุนใหม่ 50% เป็นเวลา 5 วินาที
+- Zero ทำให้ผู้เล่นหยุด 1.5 วินาที หรือบอส crash 5 วินาทีและรับดาเมจสองเท่า; มีลูกแก้วฟื้นฟู/คะแนน เว้นแต่กฎเป็น exact zero
+- เกินช่วง -99..99 เกิด overflow: ผู้เล่นเสีย 1 HP แล้วกลับเป็น 1; บอสเสีย 5% HP สูงสุดแล้วกลับเป็น 50; ทิ้งเขตอันตราย 4 วินาที
+- หารจำนวนเต็มตัดเศษเข้าหาศูนย์; modulo เก็บเครื่องหมายเดิม เช่น -17 % 10 = -7
+- ประเมิน match หลังการคำนวณเท่านั้น การ reset และการเปลี่ยนกฎไม่ trigger ซ้ำเอง
+- ทุกลูกที่ห้าของการเกิดแบบต่อเนื่องจะช่วยเข้าใกล้กฎ ณ เวลาที่เกิด พร้อมวางในระยะเข้าถึงได้; ค่าตัวเองหรือกฎที่เปลี่ยนหลังจากนั้นอาจเปลี่ยนประโยชน์ของลูกนั้น
+- ยิงลูกแก้วที่ถูกบอสดูดหรือ Jinx เพื่อทำลาย; แย่งลูกแก้วที่ทำให้บอส match ได้ Boss Deny
+- สะสมคะแนนจาก match, deny, graze, speed match และ no-hit phase; เก็บ best score ใน PlayerPrefs
+
+## โครงสร้าง
+
+`Assets/Scripts/Core` กฎ pure C#, คะแนน, game state; `Entities` ตัวละคร; `Combat` pool กระสุน/ลูกแก้ว; `Visuals` procedural sprites และ billboard; `UI` HUD และ feedback
+
+เกมสร้างสนามและภาพ pixel sprite ภายในเครื่องตอนเริ่ม ไม่ต้องดาวน์โหลด asset เพิ่ม กล้อง orthographic มุมเฉียง เคลื่อนที่/ชนกันบน XZ ด้วย swept segment checks สำหรับกระสุน และหมุนเฉพาะวัตถุภาพเข้าหากล้องใน LateUpdate
+
+เมนู **Count To Zero → Validate Arithmetic** ตรวจเลขติดลบ ขอบเขต zero/overflow คะแนน และ fairness ทุกค่าระหว่าง -99 ถึง 99 ทุกกฎ ผลอยู่ใน `Documentation/arithmetic-validation.txt`
+
+เมนู **Count To Zero → Run Play Checks** ทดสอบ match, crash, overflow, เฟส, ชนะ/แพ้, pause, pool และ billboard ใน Play Mode แล้วหยุดเกมไว้ที่หน้า Pause ผลอยู่ใน `Documentation/play-validation.txt` การทดสอบนี้จะเริ่มรอบใหม่
+
+ขอบเขตเวอร์ชันนี้: ต้นแบบเล่นได้สำหรับ desktop, HUD ภาษาอังกฤษ, ภาพ/เสียง procedural และค่าปรับสมดุลอยู่ในสคริปต์ ยังไม่มีงานภาพสำเร็จรูป จอย หรือระบบ localization
