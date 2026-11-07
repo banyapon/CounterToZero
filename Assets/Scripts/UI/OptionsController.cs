@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
@@ -10,10 +11,15 @@ namespace CountToZero
         [SerializeField] GameObject panel;
         [SerializeField] Button open, close, reset, cancel, pause;
         [SerializeField] Button[] bindingButtons;
-        [SerializeField] Text[] bindingLabels;
-        [SerializeField] Text listeningLabel;
+        [SerializeField] TMP_Text[] bindingLabels;
+        [SerializeField] TMP_Text listeningLabel;
+        [SerializeField] Slider musicVolume,sfxVolume;
+        [SerializeField] Button title;
         void Awake()
         {
+            if(musicVolume!=null){musicVolume.SetValueWithoutNotify(GameAudio.MusicVolume);musicVolume.onValueChanged.AddListener(GameAudio.SetMusic);}
+            if(sfxVolume!=null){sfxVolume.SetValueWithoutNotify(GameAudio.EffectsVolume);sfxVolume.onValueChanged.AddListener(v=>{GameAudio.SetEffects(v);GameAudio.Play(SoundCue.Pickup);});}
+            if(title!=null)title.onClick.AddListener(()=>GameManager.Instance.ReturnToTitle());
             open.onClick.AddListener(Open);close.onClick.AddListener(Close);
             reset.onClick.AddListener(()=>input.RestoreDefaults());cancel.onClick.AddListener(input.CancelListen);
             pause.onClick.AddListener(()=>GameManager.Instance.TogglePause());
@@ -27,9 +33,12 @@ namespace CountToZero
             input.OptionsOpen=true;open.interactable=pause.interactable=false;panel.SetActive(true);EventSystem.current?.SetSelectedGameObject(bindingButtons[0].gameObject);
         }
         public void Close()
-        {input.CancelListen();input.OptionsOpen=false;open.interactable=pause.interactable=true;panel.SetActive(false);EventSystem.current?.SetSelectedGameObject(open.gameObject);}
+        {PlayerPrefs.Save();input.CancelListen();input.OptionsOpen=false;open.interactable=pause.interactable=true;panel.SetActive(false);EventSystem.current?.SetSelectedGameObject(open.gameObject);}
         void Update()
         {
+            var state=GameManager.Instance.State;
+            open.gameObject.SetActive(state==GameState.Paused||state==GameState.Lost||state==GameState.Title);
+            pause.interactable=!input.OptionsOpen&&state!=GameState.Intro;
             if(!panel.activeSelf)return;
             for(int i=0;i<bindingLabels.Length;i++)bindingLabels[i].text=((ControlAction)i)+" : "+input.GetBinding(i);
             listeningLabel.text=input.ListenStatus;

@@ -1,3 +1,4 @@
+using TMPro;
 using System.IO;
 using CountToZero;
 using UnityEditor;
@@ -17,10 +18,10 @@ public static class GameplayUpgrade
     {var go=new GameObject(name,typeof(RectTransform));var rt=(RectTransform)go.transform;rt.SetParent(parent,false);rt.anchorMin=rt.anchorMax=rt.pivot=new Vector2(0,1);rt.anchoredPosition=new Vector2(x,-y);rt.sizeDelta=new Vector2(w,h);return rt;}
     static Image Panel(string name,Transform parent,float x,float y,float w,float h,Color color,bool raycast=false)
     {var image=Rect(name,parent,x,y,w,h).gameObject.AddComponent<Image>();image.color=color;image.raycastTarget=raycast;return image;}
-    static Text Label(string name,Transform parent,float x,float y,float w,float h,string content,int size=18)
-    {var text=Rect(name,parent,x,y,w,h).gameObject.AddComponent<Text>();text.font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");text.fontSize=size;text.text=content;text.color=Color.white;text.raycastTarget=false;text.verticalOverflow=VerticalWrapMode.Overflow;return text;}
+    static TMP_Text Label(string name,Transform parent,float x,float y,float w,float h,string content,int size=18)
+    {var text=Rect(name,parent,x,y,w,h).gameObject.AddComponent<TextMeshProUGUI>();text.font=TypographyUpgrade.BodyFont;text.fontSize=size;text.text=content;text.color=Color.white;text.raycastTarget=false;text.overflowMode=TextOverflowModes.Overflow;return text;}
     static Button Button(string name,Transform parent,float x,float y,float w,float h,string content)
-    {var panel=Panel(name,parent,x,y,w,h,new Color(.07f,.2f,.24f),true);var button=panel.gameObject.AddComponent<Button>();button.targetGraphic=panel;var label=Label("Label",panel.transform,0,0,w,h,content);label.alignment=TextAnchor.MiddleCenter;return button;}
+    {var panel=Panel(name,parent,x,y,w,h,new Color(.07f,.2f,.24f),true);var button=panel.gameObject.AddComponent<Button>();button.targetGraphic=panel;var label=Label("Label",panel.transform,0,0,w,h,content);label.alignment=TextAlignmentOptions.Center;return button;}
     static Material Material(string name,Color color)
     {
         string path=Root+"/Materials/"+name+".mat";var mat=AssetDatabase.LoadAssetAtPath<Material>(path);
@@ -55,7 +56,7 @@ public static class GameplayUpgrade
         Label("Help",modal.transform,310,157,700,55,"Select an action, then press a key. Duplicate keys swap.\nArrow keys remain available. Settings are saved on this device.",16);
         var rows=new Object[8];var texts=new Object[8];
         for(int i=0;i<8;i++)
-        {var button=Button("Bind "+(ControlAction)i,modal.transform,310+(i/4)*350,225+(i%4)*60,320,48,((ControlAction)i).ToString());rows[i]=button;texts[i]=button.GetComponentInChildren<Text>();}
+        {var button=Button("Bind "+(ControlAction)i,modal.transform,310+(i/4)*350,225+(i%4)*60,320,48,((ControlAction)i).ToString());rows[i]=button;texts[i]=button.GetComponentInChildren<TMP_Text>();}
         Array(options,"bindingButtons",rows);Array(options,"bindingLabels",texts);
         Wire(options,"listeningLabel",Label("Listening Status",modal.transform,310,482,720,45,"Select a binding to listen."));
         Label("Gamepad Help",modal.transform,310,535,720,70,"GAMEPAD: Left stick / D-pad move | Right stick aim | RT/RB fire\nA dash | X bullet time | Start pause | D-pad + A navigate menus\nMOBILE: Joystick Pack + on-screen buttons",16);
@@ -118,9 +119,9 @@ public static class GameplayUpgrade
         Array(encounter,"healthPickups",heals);
         var spawnRoot=GameObject.Find("Spawn Points").transform;var spawnGroup=Group("Minion Spawns",spawnRoot);var spawnPoints=new Object[4];
         for(int i=0;i<4;i++){var point=Group("Sentinel Entry "+i,spawnGroup);point.position=new Vector3(i%2==0?-8:8,0,i<2?5:-4);spawnPoints[i]=point;}Array(encounter,"minionSpawns",spawnPoints);
-        layout.Find("Player HUD/Dash Label").GetComponent<Text>().text="INVERT DASH";
-        layout.Find("Player HUD/Focus Label").GetComponent<Text>().text="BULLET TIME";
-        layout.Find("Player HUD/Controls").GetComponent<Text>().text="KEYBOARD / MOUSE / GAMEPAD\n\nOPTIONS TO CHANGE KEYS\n\nTOUCH CONTROLS ON MOBILE";
+        layout.Find("Player HUD/Dash Label").GetComponent<TMP_Text>().text="INVERT DASH";
+        layout.Find("Player HUD/Focus Label").GetComponent<TMP_Text>().text="BULLET TIME";
+        layout.Find("Player HUD/Controls").GetComponent<TMP_Text>().text="KEYBOARD / MOUSE / GAMEPAD\n\nOPTIONS TO CHANGE KEYS\n\nTOUCH CONTROLS ON MOBILE";
         EditorSceneManager.MarkSceneDirty(g.gameObject.scene);EditorSceneManager.SaveScene(g.gameObject.scene);
         AssetDatabase.SaveAssets();Debug.Log("COUNT TO ZERO: Gameplay upgrade saved to Hierarchy.");
     }

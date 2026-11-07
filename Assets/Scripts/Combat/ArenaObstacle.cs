@@ -40,7 +40,7 @@ namespace CountToZero
                 warning.SetActive(false);cube.gameObject.SetActive(true);cube.localPosition=Vector3.up*.8f;
                 if(before<1.5f && Blocks(g.Player.transform.position))
                 {
-                    if(falling)g.Player.Hurt();
+                    if(falling)g.Player.Hurt(false,"Falling cube");
                     // Always leave the player outside a newly solid block, even while stunned.
                     Vector3 away=g.Player.transform.position-Position;if(away.sqrMagnitude<.01f)away=Vector3.back;
                     away=away.normalized*1.65f;var safe=Position+away;

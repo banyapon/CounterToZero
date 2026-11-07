@@ -31,6 +31,7 @@ namespace CountToZero
             if (Active.Count>=40) return;
             var orb=pool.Get(); orb.Spawn(point,op,value,reward); Active.Add(orb);
         }
+        public void SpawnTraining(Vector3 point,MathOpType op,int value){Spawn(point,op,value);Active[Active.Count-1].Training=true;}
         public void SeedOpening()
         {
             foreach (var point in openingOrbs) Spawn(point.transform.position, point.Operation, point.Operand);
@@ -38,7 +39,7 @@ namespace CountToZero
         void Update()
         {
             var g=GameManager.Instance;
-            if (g.State!=GameState.Playing || Time.time<nextSpawn || Active.Count>=28) return;
+            if (g.State!=GameState.Playing || g.Training || Time.time<nextSpawn || Active.Count>=28) return;
             nextSpawn=Time.time+.85f;
             RandomOperation(out var op,out int value);
             count++;

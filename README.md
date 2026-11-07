@@ -86,3 +86,25 @@ Zoom limits, follow strength, offset and intro duration are editable on Arena Ca
 
 Editor: `Count To Zero / Build Campaign Scenes` authors missing scenes and wires 20 patterns.
 `Run Campaign Checks` validates progression, saves, UI raycasts, scene loads, intro, zoom, retry, ending and Endless.
+
+
+## Typography and HP bars
+
+All game scenes and number-orb labels use TextMeshPro. Body text uses `Assets/Fonts/Body SDF.asset` generated from `2005_iannnnnAMD.ttf`; headings use `Title SDF.asset` generated from `ZF#2ndPixelus.ttf`. Both include bold styling and dark outlines. Source fonts remain embedded for dynamic glyph support.
+
+Player, boss and all six pooled minions have authored world-space `HP Bar` children with current/max HP. The player also has an HP bar in the HUD, and the boss HUD bar is thicker with larger numbers. Boss arithmetic value is labeled VALUE separately. Edit dimensions, colors and font sizes directly in Hierarchy/Inspector.
+
+`Count To Zero / Validate TMP and HP Bars` checks the six scenes, text references, fonts, orb prefab and damage/healing updates.
+
+
+## First minute, pacing and audio
+
+New campaigns begin with a guided safe training sequence: movement, collect +6 to make 1 + 6 = 7, fire three shots, dash/sign inversion, and 12 seconds of slow dodge practice. Training freezes the live rule/combat clock, suppresses normal boss/encounter/orb spawning and prevents HP loss. It ends with a fresh live round. Progress is saved; training can be skipped. English instructions live in `Assets/GameAssets/Dialogues/onboarding_en.json` and display the current keyboard bindings.
+
+The six-second camera tour plays once per campaign, with mouse/touch Skip, Enter/Space or gamepad A. Later levels and retries go directly to gameplay. Defeat stays in the current scene: Enter, R or the Retry button restarts immediately, and the result shows the cause of the last hit. Title is available from pause/defeat and Options. Gameplay disables UI navigation so the movement stick and dash button cannot accidentally operate menus.
+
+Lucky cut-ins protect the player from all damage for their full visible duration plus 0.25 seconds. Pausing preserves that protection. After each 20-level block, adaptive difficulty changes by no more than +/-0.12x and the before/after value is shown.
+
+`Game Audio / Persistent Mix` is authored in every scene; a single instance persists across scene loads. Nine distinct synth cues and three synchronized 96 BPM music stems react to training, combat, phase and pause. Music and SFX have separate saved sliders in Options. Audio assets are generated offline by `Tools/generate_polish_audio.py` (original synthesis, no external samples), not constructed at runtime. Do not run generation during gameplay.
+
+Use `Count To Zero / Validate First Minute and Retry` for automated checks. Human test protocol: `Documentation/first-playtest.md`; blank results sheet: `Documentation/playtest-results.csv`. Automated checks do not establish fun or replace testing with new players or real mobile WebGL devices.

@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace CountToZero
@@ -7,10 +8,11 @@ namespace CountToZero
         public MathOpType Operation;
         public int Operand;
         public int Reward;
+        public bool Training;
         public bool Pulled { get; private set; }
         float age;
         [SerializeField] SpriteRenderer sprite;
-        [SerializeField] TextMesh label;
+        [SerializeField] TMP_Text label;
         OrbSpawner owner;
         public void Initialize(OrbSpawner spawner)
         {
@@ -18,7 +20,7 @@ namespace CountToZero
         }
         public void Spawn(Vector3 position, MathOpType op, int operand, int reward = 0)
         {
-            transform.position = position; age = 0; Pulled = false; Reward = reward;
+            Training=false;transform.position = position; age = 0; Pulled = false; Reward = reward;
             SetOperation(op,operand); gameObject.SetActive(true);
         }
         public void SetOperation(MathOpType op, int operand)
@@ -44,11 +46,11 @@ namespace CountToZero
             var g = GameManager.Instance; if (g.State != GameState.Playing) return;
             age += Time.deltaTime;
             float lifetime = Operation == MathOpType.Multiply || Operation == MathOpType.Divide ? 5 : 18;
-            if (age > lifetime) { owner.Release(this); return; }
+            if (!Training && age > lifetime) { owner.Release(this); return; }
             float bossDistance = Vector3.Distance(transform.position,g.Boss.transform.position);
-            Pulled = Reward == 0 && g.Boss.Sucking && bossDistance < 5.5f;
+            Pulled = !Training && Reward == 0 && g.Boss.Sucking && bossDistance < 5.5f;
             Vector3 target = Pulled ? g.Boss.transform.position : Operation == MathOpType.Jinx ? g.Player.transform.position : Vector3.zero;
-            if (Reward == 0)
+            if (Reward == 0 && !Training)
             {
                 Vector3 velocity = (target-transform.position).normalized * (Pulled ? 1.9f : Operation == MathOpType.Jinx ? 1.2f : .35f);
                 if (!Pulled && (Operation == MathOpType.Multiply || Operation == MathOpType.Divide)) velocity.x += Mathf.Sin(age*5)*1.5f;

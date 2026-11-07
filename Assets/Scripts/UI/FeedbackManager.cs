@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace CountToZero
@@ -12,20 +13,20 @@ namespace CountToZero
         [SerializeField] LineRenderer laser;
         [SerializeField] AudioSource audioSource;
         [SerializeField] AudioClip pickup, lucky, hit;
-        [SerializeField] TextMesh floating;
+        [SerializeField] TMP_Text floating;
         float floatUntil;
         public void ResetFeedback() {hitStopUntil=shakeUntil=laserUntil=0;MessageUntil=0;floatUntil=0;}
         public void Announce(string message,Color color) {Message=message;MessageColor=color;MessageUntil=Time.unscaledTime+2.7f;}
-        public void Pickup() {audioSource.PlayOneShot(pickup);}
+        public void Pickup() {if(GameAudio.Instance!=null)GameAudio.Play(SoundCue.Pickup);else audioSource.PlayOneShot(pickup);}
         public void Lucky(Vector3 position,bool player)
         {
             hitStopUntil=Time.unscaledTime+.15f; shakeUntil=Time.unscaledTime+.4f;
-            Time.timeScale=.1f;audioSource.PlayOneShot(lucky);
+            Time.timeScale=.1f;if(GameAudio.Instance!=null)GameAudio.Play(player?SoundCue.Lucky:SoundCue.Warning);else audioSource.PlayOneShot(lucky);
             Announce(player?"LUCKY MATCH / OVERLOAD":"OMEGA MATCH / COUNTERATTACK",player?ArenaVisuals.Green:ArenaVisuals.Red);
             floating.transform.position=position+Vector3.up*2; floating.text=player?"LUCKY!":"COUNTER!";
             floating.color=player?ArenaVisuals.Green:ArenaVisuals.Red; floatUntil=Time.unscaledTime+1;
         }
-        public void Hit(Vector3 position) {shakeUntil=Time.unscaledTime+.22f;audioSource.PlayOneShot(hit);}
+        public void Hit(Vector3 position) {shakeUntil=Time.unscaledTime+.22f;if(GameAudio.Instance!=null)GameAudio.Play(SoundCue.Hit);else audioSource.PlayOneShot(hit);}
         public void Laser(Vector3 from,Vector3 to)
         {laser.SetPosition(0,from+Vector3.up*.6f);laser.SetPosition(1,to+Vector3.up*1.2f);laserUntil=Time.unscaledTime+.4f;}
         void LateUpdate()

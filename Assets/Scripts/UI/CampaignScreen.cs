@@ -1,3 +1,4 @@
+using TMPro;
 using System;
 using System.Collections;
 using UnityEngine;
@@ -11,7 +12,7 @@ namespace CountToZero
     public sealed class CampaignScreen : MonoBehaviour
     {
         [SerializeField] CampaignPage page;
-        [SerializeField] Text heading,body,primaryLabel,secondaryLabel,progressLabel;
+        [SerializeField] TMP_Text heading,body,primaryLabel,secondaryLabel,progressLabel;
         [SerializeField] Button primary,secondary;
         [SerializeField] Slider progress;
         [SerializeField] TextAsset storyJson;
@@ -24,7 +25,7 @@ namespace CountToZero
             if(page==CampaignPage.Title){heading.text="COUNT TO ZERO";body.text="Break the deterministic core.\n100 levels. Five blocks. One impossible survivor.";primaryLabel.text="NEW GAME";secondaryLabel.text="CONTINUE";secondary.interactable=Campaign.HasSave;}
             if(page==CampaignPage.Preload){heading.text="PRELOADING SECTOR";body.text="Preparing the next scene...";primary.gameObject.SetActive(false);secondary.gameObject.SetActive(false);StartCoroutine(Load());}
             if(page==CampaignPage.Story||page==CampaignPage.StoryEnd){if(!Campaign.Active)Campaign.Resume();lines=page==CampaignPage.Story?story.intro:story.ending;ShowLine();}
-            if(page==CampaignPage.TurnEnd){heading.text=Campaign.LastWon?(Campaign.BlockComplete?"BLOCK COMPLETE":"LEVEL COMPLETE"):"SIGNAL LOST";body.text="LEVEL "+Campaign.Data.level+" / BLOCK "+Campaign.Block+"\n\n"+"TOTAL SCORE  "+Campaign.Data.totalScore+"\nNEXT DIFFICULTY  "+Campaign.Data.difficulty.ToString("0.00")+"x";primaryLabel.text=Campaign.LastWon?(Campaign.NeedsEnding?"STORY END":"NEXT LEVEL"):"RETRY LEVEL";secondaryLabel.text="SAVE & TITLE";}
+            if(page==CampaignPage.TurnEnd){heading.text=Campaign.LastWon?(Campaign.BlockComplete?"BLOCK COMPLETE":"LEVEL COMPLETE"):"SIGNAL LOST";body.text="LEVEL "+Campaign.Data.level+" / BLOCK "+Campaign.Block+"\n\n"+"TOTAL SCORE  "+Campaign.Data.totalScore+"\nNEXT DIFFICULTY  "+Campaign.Data.difficulty.ToString("0.00")+"x"+(Campaign.BlockComplete?"\nADAPTATION: "+Campaign.PreviousDifficulty.ToString("0.00")+"x -> "+Campaign.Data.difficulty.ToString("0.00")+"x":"");primaryLabel.text=Campaign.LastWon?(Campaign.NeedsEnding?"STORY END":"NEXT LEVEL"):"RETRY LEVEL";secondaryLabel.text="SAVE & TITLE";}
             if(page!=CampaignPage.Preload)EventSystem.current.SetSelectedGameObject(primary.gameObject);
         }
         void ShowLine(){heading.text=page==CampaignPage.Story?"PROLOGUE":"CORE LIBERATED";body.text=lines[line];primaryLabel.text="NEXT";secondaryLabel.text="SKIP";}

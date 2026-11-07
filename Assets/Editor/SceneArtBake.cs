@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace CountToZero
@@ -52,12 +53,12 @@ namespace CountToZero
             var renderer = go.AddComponent<SpriteRenderer>(); renderer.sprite = sprite; renderer.color = color;
             go.AddComponent<Billboard>(); return renderer;
         }
-        public static TextMesh Label(Transform parent, float height, Color color, float size = .22f)
+        public static TextMeshPro Label(Transform parent, float height, Color color, float size = .22f)
         {
             var go = new GameObject("World label"); go.transform.SetParent(parent, false); go.transform.localPosition = Vector3.up * height;
-            go.AddComponent<Billboard>(); var text = go.AddComponent<TextMesh>();
-            text.anchor = TextAnchor.MiddleCenter; text.alignment = TextAlignment.Center; text.fontSize = 48;
-            text.characterSize = size; text.color = color; return text;
+            go.AddComponent<Billboard>(); var text = go.AddComponent<TextMeshPro>();
+            text.alignment = TextAlignmentOptions.Center; text.fontSize = 5; text.font=TypographyUpgrade.BodyFont; text.fontStyle=FontStyles.Bold;
+            text.fontSize = size*32; text.rectTransform.sizeDelta=new Vector2(5,1); text.color = color; return text;
         }
         public static void Box(Transform parent, string name, Vector3 position, Vector3 scale, Color color)
         {

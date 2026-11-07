@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace CountToZero
@@ -6,7 +7,7 @@ namespace CountToZero
     {
         public float Health = 99, ShieldUntil, CrashUntil;
         public string PhaseName => Game.Phase == 1 ? "THE SENTINEL" : Game.Phase == 2 ? "SPIRAL PROTOCOL" : "ENTROPY ENGINE";
-        public bool Sucking => Game.Elapsed % 9 > 5 && Time.time >= CrashUntil;
+        public bool Sucking => !Game.Training && Game.Elapsed % 9 > 5 && Time.time >= CrashUntil;
         [SerializeField] BossPatternDefinition[] patterns;
         float fireAt, angle, patternUntil;
         int patternIndex;
@@ -15,7 +16,7 @@ namespace CountToZero
         public void SelectPattern(int index) { patternIndex = index % patterns.Length; patternUntil = Game.Elapsed + patterns[patternIndex].duration; fireAt=Time.time+.8f; }
 
         [SerializeField] SpriteRenderer sprite;
-        [SerializeField] TextMesh label;
+        [SerializeField] TMP_Text label;
         [SerializeField] Transform spawnPoint;
         Vector3 visualOrigin;
         void Awake() { visualOrigin = sprite.transform.localPosition; ResetRun(); }
@@ -27,9 +28,9 @@ namespace CountToZero
         void Shot(float degrees,float speed){Game.Bullets.Fire(transform.position,Quaternion.Euler(0,degrees,0)*Vector3.forward,true,speed);}
         void Update()
         {
-            label.text = "OMEGA-99  [" + CurrentValue + "]";
+            label.text = "VALUE " + CurrentValue;
             sprite.color = CrashUntil > Time.time ? ArenaVisuals.Green : ShieldUntil > Time.time ? ArenaVisuals.Violet : ArenaVisuals.Red;
-            if (Game.State != GameState.Playing || Time.time < CrashUntil) return;
+            if (Game.State != GameState.Playing || Game.Training || Time.time < CrashUntil) return;
             if(!Campaign.Active && Game.Elapsed>=patternUntil) SelectPattern(patternIndex+1);
             var pattern=patterns[patternIndex];float t=Game.Elapsed;
             Vector3 home=spawnPoint.position;Vector2 range=pattern.movementRange;

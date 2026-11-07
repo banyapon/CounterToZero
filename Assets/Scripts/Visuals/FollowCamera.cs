@@ -9,7 +9,7 @@ namespace CountToZero
         [SerializeField] Transform target;
         [SerializeField] Vector3 offset=new Vector3(0,21,-18);
         [SerializeField,Range(0,1)] float followAmount=.28f;
-        [SerializeField] float smoothTime=.2f, size=11.5f;
+        [SerializeField] float smoothTime=.2f, size=9.6f;
         [SerializeField] float minZoom=6, maxZoom=22, zoomSpeed=5, introDuration=6;
         Vector3 velocity,focus; Camera view; float zoom=1,introTime; bool touring;
         public bool Touring=>touring;

@@ -1,3 +1,4 @@
+using TMPro;
 using System;
 using UnityEngine;
 using UnityEngine.UI;
@@ -10,7 +11,7 @@ namespace CountToZero
     {
         [SerializeField] TextAsset englishJson;
         [SerializeField] GameObject panel;
-        [SerializeField] Text speaker,body;
+        [SerializeField] TMP_Text speaker,body;
         DialogueData data;float remaining;
         public string CurrentId {get;private set;}
         void Awake(){data=JsonUtility.FromJson<DialogueData>(englishJson.text);panel.SetActive(false);}
@@ -21,7 +22,7 @@ namespace CountToZero
         public void Clear(){remaining=0;panel.SetActive(false);}
         void Update()
         {
-            if(GameManager.Instance.State!=GameState.Playing){panel.SetActive(false);return;}
+            if(GameManager.Instance.State!=GameState.Playing||GameManager.Instance.Training){panel.SetActive(false);return;}
             remaining-=Time.deltaTime;panel.SetActive(remaining>0);
         }
     }

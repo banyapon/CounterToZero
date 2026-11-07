@@ -1,0 +1,9 @@
+{"steps":[
+{"id":"intro","title":"ENTER THE CORE","text":"Camera tour. Click SKIP, press Enter / Space, or gamepad A to start."},
+{"id":"move","title":"TRAINING 1 / MOVE","text":"Move toward the gold marker.\n{MOVE} / arrows, left stick, or touch joystick."},
+{"id":"lucky","title":"TRAINING 2 / MAKE YOUR LUCK","text":"Your VALUE is 1. Collect +6 to make 7.\n1 + 6 = 7. The gold rule is your target."},
+{"id":"celebrate","title":"LUCKY! YOU MADE 7","text":"Matching the rule unleashes a powerful attack.\nYour VALUE resets to 1. HP is a separate bar."},
+{"id":"fire","title":"TRAINING 3 / FIRE","text":"Fire three shots: {FIRE}, hold mouse click, RT/RB, or FIRE.\nShoot +/- orbs to flip their sign in the real battle."},
+{"id":"dash","title":"TRAINING 4 / DASH","text":"Move and dash: {DASH}, gamepad A, or DASH.\nDash also flips your VALUE: +1 becomes -1."},
+{"id":"dodge","title":"TRAINING 5 / DODGE","text":"Keep moving through the gaps for 12 seconds.\nPractice hits cannot take your HP. The live round is next."}
+]}

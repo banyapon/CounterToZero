@@ -18,6 +18,8 @@ namespace CountToZero
         [field: SerializeField] public PlayerInputRouter Controls { get; private set; }
         [field: SerializeField] public EncounterDirector Encounters { get; private set; }
         [field: SerializeField] public DialogueController Dialogue { get; private set; }
+        [field: SerializeField] public TutorialDirector Tutorial { get; private set; }
+        public bool Training=>Tutorial!=null&&Tutorial.Active;
         [field: SerializeField] public LuckyCutIn CutIn { get; private set; }
         public LuckyRuleEngine Rules { get; } = new LuckyRuleEngine();
         public ScoreManager Score { get; private set; } = new ScoreManager();
@@ -39,8 +41,9 @@ namespace CountToZero
             Rule = LuckyRuleEngine.Create(RuleType.ExactMatch,7); RuleTime = 15; State = GameState.Title;
         }
         void Start(){if(!Campaign.Active&&!Campaign.Resume())Campaign.NewGame();BeginIntro();}
-        public void BeginIntro(){Begin();State=GameState.Intro;View.GetComponent<FollowCamera>().StartIntro();}
-        public void CompleteIntro(){if(State==GameState.Intro){State=GameState.Playing;Dialogue.Say("intro");}}
+        public void BeginIntro(){Begin();if(!Campaign.Active||Campaign.Data.introSeen)return;State=GameState.Intro;View.GetComponent<FollowCamera>().StartIntro();}
+        public void SkipIntro(){if(State!=GameState.Intro)return;View.GetComponent<FollowCamera>().Snap();CompleteIntro();}
+        public void CompleteIntro(){if(State==GameState.Intro){State=GameState.Playing;if(Campaign.Active){Campaign.Data.introSeen=true;Campaign.Save();}Dialogue.Say("intro");}}
         public void Begin()
         {
             DamageTaken=0; Score = new ScoreManager(); Phase = 1; Elapsed = 0; SlowUntil = HazardUntil = 0;
@@ -48,7 +51,7 @@ namespace CountToZero
             Feedback.ResetFeedback(); Rule = LuckyRuleEngine.Create(RuleType.ExactMatch,7); RuleTime = 15;
             State = GameState.Playing; Time.timeScale = 1;
             View.GetComponent<FollowCamera>().Snap(); Dialogue.Say("intro");
-            Orbs.SeedOpening(); Feedback.Announce("BREACH THE DETERMINISTIC CORE", ArenaVisuals.Cyan);
+            Orbs.SeedOpening(); Tutorial?.ResetForRun(); hazard.gameObject.SetActive(false); Feedback.Announce("BREACH THE DETERMINISTIC CORE", ArenaVisuals.Cyan);
         }
         void Update()
         {
@@ -56,14 +59,15 @@ namespace CountToZero
             if (!Controls.OptionsOpen && !Controls.Listening)
             {
                 if (Controls.PausePressed) TogglePause();
+                if(State==GameState.Lost&&Keyboard.current!=null&&Keyboard.current.rKey.wasPressedThisFrame)Begin();
                 // uGUI owns Enter / gamepad submit, preventing a single input from starting twice.
             }
-            if (State != GameState.Playing) return;
+            if (State != GameState.Playing || Training) return;
             Elapsed += Time.deltaTime; RuleTime -= Time.deltaTime;
             if (RuleTime <= 0) ShiftRule();
             bool activeHazard = Time.time < HazardUntil;
             hazard.gameObject.SetActive(activeHazard);
-            if (activeHazard && Vector3.Distance(Player.transform.position, HazardPosition) < 2.3f) Player.Hurt();
+            if (activeHazard && Vector3.Distance(Player.transform.position, HazardPosition) < 2.3f) Player.Hurt(false,"Unstable floor");
 
         }
         public void TogglePause()
@@ -85,22 +89,23 @@ namespace CountToZero
             Feedback.Lucky(carrier.transform.position, player);
             if (player)
             {
-                CutIn.Show(); Dialogue.Say("lucky");
+                Player.ProtectCutIn(); CutIn.Show(); Tutorial?.LuckyMatched(); Dialogue.Say("lucky");
                 Score.Award(1000, Rule.DifficultyMultiplier, RuleTime >= 12 ? 2500 : 0);
                 if (exact) { Bullets.ClearEnemy(); Feedback.Laser(Player.transform.position, Boss.transform.position); DamageBoss(19, true); }
                 else Player.OverchargeUntil = Time.time + 5;
             }
-            else if (exact) Player.Hurt(true);
+            else if (exact) Player.Hurt(true,"Boss Lucky counter");
             else Boss.ShieldUntil = Time.time + 5;
             carrier.SetValue(player ? 1 : 50);
             if (State != GameState.Playing) return;
+            if (Training) return;
             if (exact) ShiftRule(); else Orbs.Reroll();
         }
         public void Overflow(NumberCarrier carrier)
         {
             bool player = carrier == Player;
             carrier.SetValue(player ? 1 : 50);
-            if (player) Player.Hurt(true); else DamageBoss(99 * .05f, true);
+            if (player) Player.Hurt(true,"VALUE overflow (+/-100)"); else DamageBoss(99 * .05f, true);
             HazardPosition = carrier.transform.position; HazardPosition = new Vector3(HazardPosition.x,.05f,HazardPosition.z);
             hazard.transform.position = HazardPosition; HazardUntil = Time.time + 4;
             Feedback.Announce("OVERFLOW / UNSTABLE SECTOR", ArenaVisuals.Red);
@@ -119,11 +124,11 @@ namespace CountToZero
                 Bullets.Fire(Boss.transform.position, (Player.transform.position - Boss.transform.position).normalized, true, 7);
                 return;
             }
-            Boss.Health = Mathf.Max(0, Boss.Health - amount * (Boss.CrashUntil > Time.time ? 2 : 1));
+            Boss.Health = Mathf.Max(Training?70:0, Boss.Health - amount * (Boss.CrashUntil > Time.time ? 2 : 1));
             if (Boss.Health > 99 - Phase * 33) return;
             Score.CompletePhase();
             if (Phase == 3) { Finish(true); return; }
-            Phase++; Dialogue.Say("phase" + Phase); Bullets.ClearEnemy(); Boss.CrashUntil = Time.time + 2; Player.Heal();
+            Phase++; GameAudio.Play(SoundCue.Phase); Dialogue.Say("phase" + Phase); Bullets.ClearEnemy(); Boss.CrashUntil = Time.time + 2; Player.Heal();
             ShiftRule(); Feedback.Announce("PHASE 0" + Phase + " / " + Boss.PhaseName, ArenaVisuals.Violet);
         }
         public void Focus()
@@ -136,9 +141,11 @@ namespace CountToZero
             State = won ? GameState.Won : GameState.Lost;
             if (won) Score.Award(Mathf.Max(0, 15000 - Mathf.RoundToInt(Elapsed * 50)));
             int best = PlayerPrefs.GetInt(BestScoreKey, 0);
-            if(Campaign.Active){Campaign.Complete(won,Elapsed,DamageTaken,Score.Score);ContinueCampaign();}
+            if(!won)GameAudio.Play(SoundCue.Death);
+            if(Campaign.Active){Campaign.LastCause=Player.LastDamageCause;Campaign.Complete(won,Elapsed,DamageTaken,Score.Score);if(won)ContinueCampaign();}
             if (RecordScores && Score.Score > best) { PlayerPrefs.SetInt(BestScoreKey, Score.Score); PlayerPrefs.Save(); }
         }
+        public void ReturnToTitle(){PlayerPrefs.Save();Campaign.Leave();UnityEngine.SceneManagement.SceneManager.LoadScene("Title");}
         public void ContinueCampaign(){UnityEngine.SceneManagement.SceneManager.LoadScene("TurnEnd");}
         void OnApplicationFocus(bool focused) { if (!focused && State == GameState.Playing) TogglePause(); }
         void OnApplicationPause(bool paused) { if (paused && State == GameState.Playing) TogglePause(); }

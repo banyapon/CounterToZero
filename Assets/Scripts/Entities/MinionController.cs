@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 
 namespace CountToZero
@@ -5,8 +6,9 @@ namespace CountToZero
     public sealed class MinionController : MonoBehaviour
     {
         [SerializeField] SpriteRenderer sprite;
-        [SerializeField] TextMesh label;
+        [SerializeField] TMP_Text label;
         float age,fireAt,health;
+        public float Health => Mathf.Max(0,health);
         public bool Active {get;private set;}
         public void Spawn(Vector3 position){transform.position=position;age=0;fireAt=2.5f;health=3;Active=true;gameObject.SetActive(true);}
         public void Clear(){Active=false;gameObject.SetActive(false);}
@@ -23,7 +25,7 @@ namespace CountToZero
             Vector3 direction=(g.Player.transform.position-transform.position).normalized;
             Vector3 step=(direction+Vector3.Cross(Vector3.up,direction)*Mathf.Sin(age*2)*.45f)*Time.deltaTime*1.8f;
             transform.position=g.Encounters.Move(transform.position,step);
-            if(Vector3.Distance(g.Player.transform.position,transform.position)<.65f)g.Player.Hurt();
+            if(Vector3.Distance(g.Player.transform.position,transform.position)<.65f)g.Player.Hurt(false,"Sentinel contact");
             if(age>=fireAt){fireAt=age+2.7f;g.Bullets.Fire(transform.position,direction,true,3.2f);}
             if(age>24)Clear();
         }

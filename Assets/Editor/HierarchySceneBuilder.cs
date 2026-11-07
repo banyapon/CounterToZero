@@ -1,3 +1,4 @@
+using TMPro;
 using System.IO;
 using CountToZero;
 using UnityEditor;
@@ -11,7 +12,7 @@ using UnityEngine.UI;
 public static class HierarchySceneBuilder
 {
     const string Root = "Assets/GameAssets";
-    static Font font;
+    static TMP_FontAsset font;
     static Color Ink => new Color(.035f,.055f,.09f,.97f);
     static Transform Group(string name, Transform parent = null)
     { var go=new GameObject(name);go.transform.SetParent(parent,false);return go.transform; }
@@ -61,7 +62,7 @@ public static class HierarchySceneBuilder
         if(existing!=null)return existing;
         var material=new Material(source);AssetDatabase.CreateAsset(material,path);return material;
     }
-    static TextMesh Label(Transform parent,string name,float height,Color color,float size,string text)
+    static TextMeshPro Label(Transform parent,string name,float height,Color color,float size,string text)
     {var label=SceneArtBake.Label(parent,height,color,size);label.name=name;label.text=text;return label;}
 
     [MenuItem("Count To Zero/Create Hierarchy Scene")]
@@ -142,10 +143,10 @@ public static class HierarchySceneBuilder
     }
     static Image Panel(string name,Transform parent,float x,float y,float w,float h,Color color)
     {var image=Rect(name,parent,x,y,w,h).gameObject.AddComponent<Image>();image.color=color;image.raycastTarget=false;return image;}
-    static Text Text(string name,Transform parent,float x,float y,float w,float h,string text,int size,Color color)
+    static TMP_Text Text(string name,Transform parent,float x,float y,float w,float h,string text,int size,Color color)
     {
-        var label=Rect(name,parent,x,y,w,h).gameObject.AddComponent<Text>();label.font=font;label.fontSize=size;label.text=text;label.color=color;
-        label.raycastTarget=false;label.verticalOverflow=VerticalWrapMode.Overflow;return label;
+        var label=Rect(name,parent,x,y,w,h).gameObject.AddComponent<TextMeshProUGUI>();label.font=font;label.fontSize=size;label.text=text;label.color=color;
+        label.raycastTarget=false;label.overflowMode=TextOverflowModes.Overflow;return label;
     }
     static Image Bar(string name,Transform parent,float x,float y,float w,Color color)
     {
@@ -154,7 +155,7 @@ public static class HierarchySceneBuilder
     }
     static void BuildHUD()
     {
-        font=Resources.GetBuiltinResource<Font>("LegacyRuntime.ttf");
+        font=TypographyUpgrade.BodyFont;
         var canvas=Group("HUD Canvas").gameObject.AddComponent<Canvas>();canvas.renderMode=RenderMode.ScreenSpaceOverlay;
         var scaler=canvas.gameObject.AddComponent<CanvasScaler>();scaler.uiScaleMode=CanvasScaler.ScaleMode.ScaleWithScreenSize;scaler.referenceResolution=new Vector2(1280,800);scaler.screenMatchMode=CanvasScaler.ScreenMatchMode.Expand;
         canvas.gameObject.AddComponent<GraphicRaycaster>();var hud=canvas.gameObject.AddComponent<HUDController>();
@@ -192,7 +193,7 @@ public static class HierarchySceneBuilder
         Wire(hud,"overlayBody",Text("Instructions",card,42,165,640,240,"Collect orbs. Match the Lucky Rule. Survive OMEGA-99.",18,Color.white));
         var buttonImage=Panel("Start Resume Restart",card,42,408,626,58,new Color(.08f,.19f,.23f));buttonImage.raycastTarget=true;
         var button=buttonImage.gameObject.AddComponent<Button>();button.targetGraphic=buttonImage;
-        var label=Text("Button Label",button.transform,0,0,626,58,"ENTER THE CORE [ ENTER ]",20,Color.white);label.alignment=TextAnchor.MiddleCenter;
+        var label=Text("Button Label",button.transform,0,0,626,58,"ENTER THE CORE [ ENTER ]",20,Color.white);label.alignment=TextAlignmentOptions.Center;
         Wire(hud,"actionButton",button);Wire(hud,"actionLabel",label);Wire(hud,"overlay",overlay.gameObject);
         var events=Group("EventSystem");events.gameObject.AddComponent<EventSystem>();events.gameObject.AddComponent<InputSystemUIInputModule>();
     }

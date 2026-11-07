@@ -61,10 +61,10 @@ namespace CountToZero
         }
         void Update()
         {
-            var g=GameManager.Instance;if(g.State!=GameState.Playing)return;
+            var g=GameManager.Instance;if(g.State!=GameState.Playing||g.Training)return;
             if(g.Elapsed>=healAt){healAt=g.Elapsed+18;DropHealth(new Vector3(Random.Range(-7f,7f),0,Random.Range(-5f,2f)),true);}
             if(g.Elapsed<eventAt)return;
-            eventAt=g.Elapsed+(g.Phase==1?10:8);eventIndex++;
+            eventAt=g.Elapsed+(g.Phase==1?10:8);eventIndex++;GameAudio.Play(SoundCue.Warning);
             if(eventIndex%3==1){SummonMinion();if(g.Phase>1)SummonMinion();g.Dialogue.Say("minions");}
             else if(eventIndex%3==2)
             {
