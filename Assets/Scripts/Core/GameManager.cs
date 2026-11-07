@@ -3,7 +3,7 @@ using UnityEngine.InputSystem;
 
 namespace CountToZero
 {
-    public enum GameState { Title, Playing, Paused, Won, Lost }
+    public enum GameState { Title, Playing, Paused, Won, Lost, Intro }
     [DefaultExecutionOrder(-100)]
     public sealed class GameManager : MonoBehaviour
     {
@@ -15,12 +15,18 @@ namespace CountToZero
         [field: SerializeField] public OrbSpawner Orbs { get; private set; }
         [field: SerializeField] public BulletPattern Bullets { get; private set; }
         [field: SerializeField] public FeedbackManager Feedback { get; private set; }
+        [field: SerializeField] public PlayerInputRouter Controls { get; private set; }
+        [field: SerializeField] public EncounterDirector Encounters { get; private set; }
+        [field: SerializeField] public DialogueController Dialogue { get; private set; }
+        [field: SerializeField] public LuckyCutIn CutIn { get; private set; }
         public LuckyRuleEngine Rules { get; } = new LuckyRuleEngine();
         public ScoreManager Score { get; private set; } = new ScoreManager();
         public LuckyRule Rule { get; private set; }
         public GameState State { get; private set; }
         public float RuleTime { get; private set; }
         public float Elapsed { get; private set; }
+        public int DamageTaken { get; private set; }
+        public void RecordDamage(){DamageTaken++;}
         public int Phase { get; private set; } = 1;
         public float SlowUntil { get; private set; }
         public float HazardUntil { get; private set; }
@@ -32,22 +38,25 @@ namespace CountToZero
             Instance = this; Time.timeScale = 1;
             Rule = LuckyRuleEngine.Create(RuleType.ExactMatch,7); RuleTime = 15; State = GameState.Title;
         }
+        void Start(){if(!Campaign.Active&&!Campaign.Resume())Campaign.NewGame();BeginIntro();}
+        public void BeginIntro(){Begin();State=GameState.Intro;View.GetComponent<FollowCamera>().StartIntro();}
+        public void CompleteIntro(){if(State==GameState.Intro){State=GameState.Playing;Dialogue.Say("intro");}}
         public void Begin()
         {
-            Score = new ScoreManager(); Phase = 1; Elapsed = 0; SlowUntil = HazardUntil = 0;
-            Bullets.Clear(); Orbs.Clear(); Player.ResetRun(); Boss.ResetRun();
+            DamageTaken=0; Score = new ScoreManager(); Phase = 1; Elapsed = 0; SlowUntil = HazardUntil = 0;
+            Bullets.Clear(); Orbs.Clear(); Player.ResetRun(); Boss.ResetRun(); if(Campaign.Active)Boss.SelectPattern(Campaign.PatternIndex); Encounters.ResetRun(); CutIn.Clear();
             Feedback.ResetFeedback(); Rule = LuckyRuleEngine.Create(RuleType.ExactMatch,7); RuleTime = 15;
             State = GameState.Playing; Time.timeScale = 1;
+            View.GetComponent<FollowCamera>().Snap(); Dialogue.Say("intro");
             Orbs.SeedOpening(); Feedback.Announce("BREACH THE DETERMINISTIC CORE", ArenaVisuals.Cyan);
         }
         void Update()
         {
-            var keyboard = Keyboard.current;
-            if (keyboard != null)
+            if(State==GameState.Paused && SlowUntil>Time.unscaledTime)SlowUntil+=Time.unscaledDeltaTime;
+            if (!Controls.OptionsOpen && !Controls.Listening)
             {
-                if (keyboard.enterKey.wasPressedThisFrame && (State == GameState.Title || State == GameState.Won || State == GameState.Lost)) Begin();
-                if (keyboard.escapeKey.wasPressedThisFrame) TogglePause();
-                if (keyboard.rKey.wasPressedThisFrame && (State == GameState.Won || State == GameState.Lost)) Begin();
+                if (Controls.PausePressed) TogglePause();
+                // uGUI owns Enter / gamepad submit, preventing a single input from starting twice.
             }
             if (State != GameState.Playing) return;
             Elapsed += Time.deltaTime; RuleTime -= Time.deltaTime;
@@ -59,6 +68,7 @@ namespace CountToZero
         }
         public void TogglePause()
         {
+            if (Controls.OptionsOpen || Controls.Listening) return;
             if (State == GameState.Playing) State = GameState.Paused;
             else if (State == GameState.Paused) State = GameState.Playing;
         }
@@ -75,6 +85,7 @@ namespace CountToZero
             Feedback.Lucky(carrier.transform.position, player);
             if (player)
             {
+                CutIn.Show(); Dialogue.Say("lucky");
                 Score.Award(1000, Rule.DifficultyMultiplier, RuleTime >= 12 ? 2500 : 0);
                 if (exact) { Bullets.ClearEnemy(); Feedback.Laser(Player.transform.position, Boss.transform.position); DamageBoss(19, true); }
                 else Player.OverchargeUntil = Time.time + 5;
@@ -112,7 +123,7 @@ namespace CountToZero
             if (Boss.Health > 99 - Phase * 33) return;
             Score.CompletePhase();
             if (Phase == 3) { Finish(true); return; }
-            Phase++; Bullets.ClearEnemy(); Boss.CrashUntil = Time.time + 2; Player.Heal();
+            Phase++; Dialogue.Say("phase" + Phase); Bullets.ClearEnemy(); Boss.CrashUntil = Time.time + 2; Player.Heal();
             ShiftRule(); Feedback.Announce("PHASE 0" + Phase + " / " + Boss.PhaseName, ArenaVisuals.Violet);
         }
         public void Focus()
@@ -121,11 +132,16 @@ namespace CountToZero
         }
         public void Finish(bool won)
         {
+            if(State!=GameState.Playing)return;
             State = won ? GameState.Won : GameState.Lost;
             if (won) Score.Award(Mathf.Max(0, 15000 - Mathf.RoundToInt(Elapsed * 50)));
             int best = PlayerPrefs.GetInt(BestScoreKey, 0);
+            if(Campaign.Active){Campaign.Complete(won,Elapsed,DamageTaken,Score.Score);ContinueCampaign();}
             if (RecordScores && Score.Score > best) { PlayerPrefs.SetInt(BestScoreKey, Score.Score); PlayerPrefs.Save(); }
         }
+        public void ContinueCampaign(){UnityEngine.SceneManagement.SceneManager.LoadScene("TurnEnd");}
+        void OnApplicationFocus(bool focused) { if (!focused && State == GameState.Playing) TogglePause(); }
+        void OnApplicationPause(bool paused) { if (paused && State == GameState.Playing) TogglePause(); }
         void OnDestroy() { Time.timeScale = 1; if (Instance == this) Instance = null; }
     }
 }

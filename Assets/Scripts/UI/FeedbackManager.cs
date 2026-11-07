@@ -8,16 +8,12 @@ namespace CountToZero
         public Color MessageColor { get; private set; }
         public float MessageUntil { get; private set; }
         float hitStopUntil, shakeUntil, laserUntil;
-        Vector3 cameraHome;
+        public Vector3 ShakeOffset => Time.unscaledTime < shakeUntil && GameManager.Instance.State == GameState.Playing ? Random.insideUnitSphere*.09f : Vector3.zero;
         [SerializeField] LineRenderer laser;
         [SerializeField] AudioSource audioSource;
         [SerializeField] AudioClip pickup, lucky, hit;
         [SerializeField] TextMesh floating;
         float floatUntil;
-        void Awake()
-        {
-            cameraHome=GameManager.Instance.View.transform.position;
-        }
         public void ResetFeedback() {hitStopUntil=shakeUntil=laserUntil=0;MessageUntil=0;floatUntil=0;}
         public void Announce(string message,Color color) {Message=message;MessageColor=color;MessageUntil=Time.unscaledTime+2.7f;}
         public void Pickup() {audioSource.PlayOneShot(pickup);}
@@ -36,7 +32,7 @@ namespace CountToZero
         {
             var g=GameManager.Instance;
             Time.timeScale=g.State!=GameState.Playing?0:Time.unscaledTime<hitStopUntil?.1f:Time.unscaledTime<g.SlowUntil?.35f:1;
-            g.View.transform.position=cameraHome+(Time.unscaledTime<shakeUntil?Random.insideUnitSphere*.09f:Vector3.zero);
+
             laser.enabled=Time.unscaledTime<laserUntil;
             floating.gameObject.SetActive(Time.unscaledTime<floatUntil);
             if(floating.gameObject.activeSelf) floating.transform.position+=Vector3.up*Time.unscaledDeltaTime*.6f;

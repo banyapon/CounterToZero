@@ -36,7 +36,7 @@ public static class CountToZeroPlayChecks
             if(g==null)throw new Exception("Game did not bootstrap");
             if(stage==0)
             {
-                g.RecordScores=false;
+                Campaign.Leave();g.RecordScores=false;
                 g.Begin();Check(g.Player.Health==5 && g.Boss.Health==99,"initial state");
                 g.Player.ApplyMathOperation(MathOpType.Add,6);
                 Check(g.Player.CurrentValue==1 && g.Boss.Health==80,"exact laser and reset");

@@ -1,0 +1,2 @@
+PASS: 367 campaign checks. 100-level progression, five blocks, save/resume, adaptive difficulty, actual scene transitions and UI raycasts, story skip, camera intro, Ctrl and mouse-wheel zoom, all 20 patterns emitting bullets, boss defeat/retry, ending, declining and accepting Endless.
+Physical mobile/browser not tested.

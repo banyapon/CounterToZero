@@ -26,21 +26,16 @@ namespace CountToZero
             label.text = CurrentValue.ToString("+0;-0;0");
             sprite.color = Invulnerable && Mathf.Sin(Time.unscaledTime*40)>0 ? Color.white : OverchargeUntil > Time.time ? ArenaVisuals.Green : ArenaVisuals.Cyan;
             if (Game.State != GameState.Playing) return;
-            var k = Keyboard.current; var mouse = Mouse.current;
-            Vector3 movement = Vector3.zero;
-            if (k != null)
-            {
-                movement.x = ((k.dKey.isPressed || k.rightArrowKey.isPressed) ? 1 : 0) - ((k.aKey.isPressed || k.leftArrowKey.isPressed) ? 1 : 0);
-                movement.z = ((k.wKey.isPressed || k.upArrowKey.isPressed) ? 1 : 0) - ((k.sKey.isPressed || k.downArrowKey.isPressed) ? 1 : 0);
-                movement.Normalize(); if (movement.sqrMagnitude > 0) direction = movement;
-                if (k.spaceKey.wasPressedThisFrame) DashInversion();
-                if (k.eKey.wasPressedThisFrame) Game.Focus();
-            }
+            var controls = Game.Controls;
+            Vector3 movement = controls.WorldDirection(controls.Move);
+            if (movement.sqrMagnitude > .01f) direction = movement.normalized;
+            if (controls.DashPressed) DashInversion();
+            if (controls.FocusPressed) Game.Focus();
             if (Time.time >= StunUntil)
             {
-                transform.position += (Time.time < dashUntil ? dashDirection * 24 : movement * 6) * Time.deltaTime;
+                transform.position = Game.Encounters.Move(transform.position, (Time.time < dashUntil ? dashDirection * 24 : movement * 6) * Time.deltaTime);
                 var p = transform.position; p.x = Mathf.Clamp(p.x,-10.3f,10.3f); p.z = Mathf.Clamp(p.z,-7.3f,7.3f); transform.position = p;
-                if ((mouse != null && mouse.leftButton.isPressed) || (k != null && k.jKey.isPressed)) ModuloShot();
+                if (controls.FireHeld) ModuloShot();
             }
         }
         public void DashInversion()
@@ -54,7 +49,9 @@ namespace CountToZero
             if (Time.time < shotReady) return;
             bool charged = Time.time < OverchargeUntil; shotReady = Time.time + (charged ? .095f : .18f);
             Vector3 aim = Game.Boss.transform.position;
-            if (Mouse.current != null && Mouse.current.leftButton.isPressed)
+            if(Game.Controls.TouchVisible)aim=Game.Encounters.AutoAim(transform.position);
+            if (Game.Controls.StickAim.sqrMagnitude > .01f) aim=transform.position+Game.Controls.WorldDirection(Game.Controls.StickAim)*15;
+            else if (Game.Controls.MouseAiming && Mouse.current != null)
             {
                 var ray = Game.View.ScreenPointToRay(Mouse.current.position.ReadValue());
                 if (new Plane(Vector3.up, Vector3.zero).Raycast(ray,out float distance)) aim = ray.GetPoint(distance);
@@ -64,7 +61,7 @@ namespace CountToZero
         public void Hurt(bool unavoidable = false)
         {
             if (Game.State != GameState.Playing || (!unavoidable && Invulnerable)) return;
-            Health--; invulnerableUntil = Time.time + 1.2f; Game.Score.Hit();
+            Health--; Game.RecordDamage(); invulnerableUntil = Time.time + 1.2f; Game.Score.Hit();
             Game.Feedback.Hit(transform.position);
             if (Health <= 0) Game.Finish(false);
         }

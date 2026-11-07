@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.EventSystems;
 
 namespace CountToZero
 {
@@ -11,17 +12,20 @@ namespace CountToZero
         [SerializeField] GameObject overlay;
         [SerializeField] Text overlayTitle, overlayBody, actionLabel;
         [SerializeField] Button actionButton;
+        GameState previousState = (GameState)(-1);
         void Awake() { actionButton.onClick.AddListener(Activate); }
+        public void SelectAction() { EventSystem.current?.SetSelectedGameObject(actionButton.gameObject); }
         void OnDestroy() { actionButton.onClick.RemoveListener(Activate); }
         void Activate()
         {
             var g = GameManager.Instance;
+            if (g.Controls.OptionsOpen || g.Controls.Listening) return;
             if (g.State == GameState.Paused) g.TogglePause(); else g.Begin();
         }
         void Update()
         {
             var g = GameManager.Instance;
-            bossTitle.text = "OMEGA-99 / PHASE 0" + g.Phase + " / " + g.Boss.PhaseName;
+            bossTitle.text = (Campaign.Active?"LEVEL "+Campaign.Data.level+" / BLOCK "+Campaign.Block+" / ":"")+"OMEGA-99 / PHASE 0" + g.Phase + " / " + g.Boss.PatternName;
             bossHealth.text = Mathf.CeilToInt(g.Boss.Health) + " / 99";
             healthFill.fillAmount = g.Boss.Health / 99;
             score.text = "SCORE / x" + g.Score.Combo.ToString("0.0") + "\n" + g.Score.Score.ToString("000000");
@@ -36,12 +40,19 @@ namespace CountToZero
             announcement.text = Time.unscaledTime < g.Feedback.MessageUntil ? g.Feedback.Message : "";
             announcement.color = g.Feedback.MessageColor;
             status.text = g.Boss.Sucking ? "WARNING / ORB SIPHON" : g.Player.StunUntil > Time.time ? "ZERO OUT / STUNNED" : g.Player.OverchargeUntil > Time.time ? "OVERCHARGED / HOMING SHOTS" : "";
-            overlay.SetActive(g.State != GameState.Playing);
+            overlay.SetActive(g.State != GameState.Playing && g.State != GameState.Intro && !g.Controls.OptionsOpen);
+            actionButton.interactable=!g.Controls.OptionsOpen;
+            if (g.State != previousState)
+            {
+                previousState=g.State;
+                if (g.State!=GameState.Playing && !g.Controls.OptionsOpen) SelectAction();
+                else EventSystem.current?.SetSelectedGameObject(null);
+            }
             if (g.State == GameState.Playing) return;
             bool title = g.State == GameState.Title, paused = g.State == GameState.Paused;
             overlayTitle.text = title ? "COUNT TO ZERO" : paused ? "SYSTEM PAUSED" : g.State == GameState.Won ? "CORE LIBERATED" : "SIGNAL LOST";
             overlayBody.text = title ? "Outcalculate OMEGA-99. Survive the bullet storm.\n\n01   Collect orbs to match the golden Lucky Rule.\n\n02   Shoot +/- orbs to flip them. Deny the boss its orbs.\n\n03   Dash flips your sign. Zero stuns. +/-100 explodes.\n\nExact match = laser. Other matches = homing fire for 5s."
-                : paused ? "WASD / arrows: move    Mouse + LMB: aim and fire\n\nJ: shoot boss    Space: invert dash    E: bullet time\n\nCyan = add    Gold = subtract    Red = danger"
+                : paused ? "Controls can be changed in OPTIONS.\n\nGamepad: left stick move / right stick aim / RT fire\nA: dash / X: bullet time / Start: pause\n\nTouch: joystick + FIRE / DASH / FOCUS buttons."
                 : "SCORE  " + g.Score.Score.ToString("N0") + "     RANK  " + g.Score.Grade + "\n\nTIME  " + g.Elapsed.ToString("0.0") + "s    PHASE  " + g.Phase + " OF 3\n\nPERSONAL BEST  " + PlayerPrefs.GetInt(GameManager.BestScoreKey, 0).ToString("N0");
             actionLabel.text = title ? "ENTER THE CORE  [ ENTER ]" : paused ? "RESUME  [ ESC ]" : "REBOOT RUN  [ ENTER / R ]";
         }

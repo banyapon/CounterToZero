@@ -132,6 +132,7 @@ public static class HierarchySceneBuilder
         EditorBuildSettings.scenes=new[]{new EditorBuildSettingsScene("Assets/Scenes/CountToZero.unity",true)};
         AssetDatabase.SaveAssets();Selection.activeGameObject=environment.gameObject;
         SceneView.lastActiveSceneView?.LookAt(Vector3.zero,Quaternion.Euler(50,0,0),22);
+        GameplayUpgrade.Upgrade();
         Debug.Log("COUNT TO ZERO: Hierarchy scene saved with persistent sprites, materials, audio, prefabs and Canvas.");
     }
     static RectTransform Rect(string name,Transform parent,float x,float y,float w,float h)

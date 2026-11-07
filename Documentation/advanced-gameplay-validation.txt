@@ -1,0 +1,3 @@
+PASS: 26 Play mode assertions.
+English JSON, cut-in, six pattern assets, warning/solid/falling cubes, swept obstruction, minions, health pickup, camera follow, key assignment/listening, virtual gamepad move/aim/fire, pause, touch dash, encounter reset.
+Physical mobile browser and physical gamepad not tested.

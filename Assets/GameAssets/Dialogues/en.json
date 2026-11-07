@@ -1,0 +1,12 @@
+{
+  "lines": [
+    { "id": "intro", "speaker": "OMEGA-99", "text": "Every outcome is calculated. You are the error I will erase.", "duration": 4 },
+    { "id": "phase2", "speaker": "GLITCH-0", "text": "Your rules are cracking. Let's change the equation.", "duration": 3 },
+    { "id": "phase3", "speaker": "OMEGA-99", "text": "Containment failed. Deploying entropy protocol.", "duration": 3 },
+    { "id": "lucky", "speaker": "GLITCH-0", "text": "My number. My move. Count to ZERO!", "duration": 2 },
+    { "id": "walls", "speaker": "OMEGA-99", "text": "Your escape routes have been recalculated.", "duration": 2.5 },
+    { "id": "rain", "speaker": "GLITCH-0", "text": "Look out! Move away from the marked tiles!", "duration": 2.5 },
+    { "id": "minions", "speaker": "OMEGA-99", "text": "Sentinel processes: eliminate the anomaly.", "duration": 2.5 },
+    { "id": "heal", "speaker": "GLITCH-0", "text": "Integrity restored. Still in the game.", "duration": 2 }
+  ]
+}
