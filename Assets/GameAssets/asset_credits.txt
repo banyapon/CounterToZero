@@ -1,0 +1,39 @@
+COUNT TO ZERO / ASSET CREDITS
+
+Pixel UI Sci-Fi Free - HUD Kit Sampler 1.0.4
+heyheythere / HeyHeyThere
+https://itch.io/profile/heyheythere
+Unity Asset Store product 412096
+
+Joystick Pack 2.1
+Fenerax Studios
+https://assetstore.unity.com/packages/tools/input-management/joystick-pack-107631
+
+GravityBold8: JohnWatson
+ZF #2ndPixelus: Chayanon Ruamcharoen (2005)
+2005_iannnnnAMD: Prachya Singhto / iannnnn (2005)
+Font metadata on the latter two states: For educations used only.
+Liberation Sans: Steve Matteson / Ascender; Google (2010), Red Hat (2012). SIL OFL 1.1.
+
+Character source sheets (man/1, man/8 and supplied variants): supplied with this project; original creator not identified in local metadata.
+Hero, robot and assistant edits: project Aseprite artwork.
+Comic cutscenes 1-3: original project artwork, drawn in Aseprite.
+
+Choose, wobble, Explosion, GameOver, Hit, Lucky, Pickup audio: supplied with this project; original creator not identified in local metadata.
+Polish audio / music beds: project synthesis, Tools/generate_polish_audio.py.
+Arena geometry, circuit borders, particles and pattern assets: project-generated.
+
+Unity / TextMesh Pro / Universal Render Pipeline / Input System: Unity Technologies and package contributors.
+Aseprite: Igara Studio (art authoring tool).
+
+Detailed local asset inventory: Documentation/asset-credit-inventory.csv
+Unidentified source credits remain explicitly marked; no authorship inferred.
+
+Mobile control icons: gdb-switch-2.png, supplied with the project; creator not identified in accompanying metadata. Sprite sheet preserved; four slices used for orange fire, white slide/focus and analog.
+
+Blocked boss-hit cue: original project synthesis, Tools/generate_blocked_audio.py (no external samples).
+
+CUTSCENE REFRESH
+Three layered circuit comic panels authored with Aseprite scripting. Character artwork reused from user-supplied GameAssets/UI/title.png; original character artist not identified. Omega design follows the existing in-game diamond boss. Sources: ArtSource/cutscene_1..3.aseprite; Tools/draw_title_cutscenes.lua.
+
+Lucky charge portrait: original pixel drawing and four-frame Aseprite animation, based on the supplied title hero's brown hair and white uniform. Source: ArtSource/lucky_charge.aseprite; Tools/draw_lucky_charge.lua.

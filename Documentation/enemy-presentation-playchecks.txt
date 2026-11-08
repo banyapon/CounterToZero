@@ -1,0 +1,1 @@
+PASS / 15 checks: hero/enemy facing, eight enemy frames, white expanding death ring, lifetime, pool reuse and duplicate-hit protection.

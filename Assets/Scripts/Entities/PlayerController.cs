@@ -11,7 +11,7 @@ namespace CountToZero
         public string LastDamageCause {get;private set;}="";
         float cutInProtection;
         public void ProtectCutIn(){cutInProtection=.25f;}
-        public int Health { get; private set; } = 5;
+        public float Health { get; private set; } = 5;
         public float OverchargeUntil, StunUntil, SilenceUntil;
         public float DashCooldown => Mathf.Max(0, dashReady - Time.time);
         public bool Invulnerable => Time.time < invulnerableUntil;
@@ -24,13 +24,14 @@ namespace CountToZero
         void Awake() { visualOrigin = sprite.transform.localPosition; ResetRun(); }
         public void ResetRun()
         {
-            ShotsFired=DashesUsed=0;LastDamageCause="";cutInProtection=0;transform.position = spawnPoint.position; Health = 5; SetValue(1);
+            sprite.enabled=true;ShotsFired=DashesUsed=0;LastDamageCause="";cutInProtection=0;transform.position = spawnPoint.position; Health = 5; SetValue(1);
             dashReady = dashUntil = invulnerableUntil = shotReady = OverchargeUntil = StunUntil = SilenceUntil = 0;
         }
         void Update()
         {
             label.text = CurrentValue.ToString("+0;-0;0");
-            sprite.color = Invulnerable && Mathf.Sin(Time.unscaledTime*40)>0 ? Color.white : OverchargeUntil > Time.time ? ArenaVisuals.Green : ArenaVisuals.Cyan;
+            if(Game.State==GameState.Victory || Game.State==GameState.Won)return;
+            sprite.color = Invulnerable && Mathf.Sin(Time.unscaledTime*40)>0 ? Color.white : OverchargeUntil > Time.time ? ArenaVisuals.Green : Color.white;
             if (Game.State != GameState.Playing) return;
             if(!Game.CutIn.Visible)cutInProtection=Mathf.Max(0,cutInProtection-Time.unscaledDeltaTime);
             var controls = Game.Controls;
@@ -58,7 +59,7 @@ namespace CountToZero
             if (Time.time < shotReady) return;
             ShotsFired++;GameAudio.Play(SoundCue.Shoot);
             bool charged = Time.time < OverchargeUntil; shotReady = Time.time + (charged ? .095f : .18f);
-            Vector3 aim = Game.Boss.transform.position;
+            Vector3 aim = BattleExpansion.Instance!=null?BattleExpansion.Instance.BossAim:Game.Boss.transform.position;
             if(Game.Controls.TouchVisible)aim=Game.Encounters.AutoAim(transform.position);
             if (Game.Controls.StickAim.sqrMagnitude > .01f) aim=transform.position+Game.Controls.WorldDirection(Game.Controls.StickAim)*15;
             else if (Game.Controls.MouseAiming && Mouse.current != null)
@@ -75,8 +76,22 @@ namespace CountToZero
             if(Game.CutIn.Visible||cutInProtection>0||(!unavoidable&&Invulnerable))return;
             LastDamageCause=cause;
             Health--; Game.RecordDamage(); invulnerableUntil = Time.time + 1.2f; Game.Score.Hit();
-            Game.Feedback.Hit(transform.position);Game.Feedback.Announce("HIT / "+cause.ToUpperInvariant(),ArenaVisuals.Red);
-            if (Health <= 0) Game.Finish(false);
+            BattleExpansion.Instance?.Burst(transform.position,Color.red,false,Health<=0?64:22);Game.Feedback.Hit(transform.position);Game.Feedback.Announce("HIT / "+cause.ToUpperInvariant(),ArenaVisuals.Red);
+            if (Health <= 0) {sprite.enabled=false;Game.Finish(false);}
+        }
+        public bool HitLaser(Vector3 pushDirection)
+        {
+            if(Game.State!=GameState.Playing || Game.Training || Invulnerable || Game.CutIn.Visible || cutInProtection>0)return false;
+            LastDamageCause="Red laser / 50% max HP";Health=Mathf.Max(0,Health-2.5f);Game.RecordDamage();Game.Score.Hit();
+            invulnerableUntil=Time.time+1.2f;StunUntil=Time.time+.2f;
+            transform.position=Game.Encounters.Move(transform.position,pushDirection.normalized*2.2f);
+            BattleExpansion.Instance?.Burst(transform.position,Color.red,false,Health<=0?64:22);Game.Feedback.Hit(transform.position);Game.Feedback.Announce("LASER HIT / -50% HP",ArenaVisuals.Red);
+            if(Health<=0){sprite.enabled=false;Game.Finish(false);}return true;
+        }
+        public void Crush()
+        {
+            if(Game.State!=GameState.Playing || Game.Training || Game.CutIn.Visible)return;
+            sprite.enabled=false;LastDamageCause="Crushed at bottom edge";Health=0;Game.RecordDamage();BattleExpansion.Instance?.Burst(transform.position,Color.red,false,Health<=0?64:22);Game.Feedback.Hit(transform.position);Game.Finish(false);
         }
         public void Heal() { if(Health<5)GameAudio.Play(SoundCue.Heal);Health = Mathf.Min(5,Health+1); }
     }

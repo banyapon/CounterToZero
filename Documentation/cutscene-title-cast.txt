@@ -1,0 +1,5 @@
+Three 480x360 pixel-art story panels exported from layered native Aseprite documents.
+Layers: circuit environment, boss/transfer/core, supplied title cast, comic border/sparks.
+Story uses panels 1 and 2; StoryEnd uses panel 3 through existing scene references.
+Original cutscene PNG and Aseprite sources backed up to Backup/CutsceneTitleCast.
+Character pixels reuse title.png; backgrounds and boss illustrations drawn in Aseprite Lua.

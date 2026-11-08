@@ -10,7 +10,6 @@ namespace CountToZero
     {
         public RuleType Type;
         public int TargetValue;
-        public string DescriptionTH;
         public float DifficultyMultiplier;
         public string Label => Type switch
         {
@@ -38,14 +37,7 @@ namespace CountToZero
         public static LuckyRule Create(RuleType type, int target = 0) => new LuckyRule
         {
             Type = type, TargetValue = target,
-            DifficultyMultiplier = type == RuleType.ExactMatch ? 3 : type == RuleType.PrimeNumber ? 2.5f : type == RuleType.MultipleOf ? 1.5f : 1,
-            DescriptionTH = type switch
-            {
-                RuleType.ExactMatch => "ทำค่าให้เท่ากับ " + target,
-                RuleType.EvenNumber => "จำนวนคู่", RuleType.OddNumber => "จำนวนคี่",
-                RuleType.MultipleOf => "พหุคูณของ " + target, RuleType.PrimeNumber => "จำนวนเฉพาะ",
-                RuleType.GreaterThan => "มากกว่า " + target, _ => "น้อยกว่า " + target
-            }
+            DifficultyMultiplier = type == RuleType.ExactMatch ? 3 : type == RuleType.PrimeNumber ? 2.5f : type == RuleType.MultipleOf ? 1.5f : 1
         };
         public bool Evaluate(int value, LuckyRule rule)
         {

@@ -14,8 +14,13 @@ namespace CountToZero
         [SerializeField] TMP_Text overlayTitle, overlayBody, actionLabel;
         [SerializeField] Button actionButton;
         [SerializeField] Button returnToTitle;
+        Image menuCard; Sprite normalCardSprite; Color normalCardColor; Outline cardOutline; Color normalOutline;
         GameState previousState = (GameState)(-1);
-        void Awake() { actionButton.onClick.AddListener(Activate); }
+        void Awake() { actionButton.onClick.AddListener(Activate);
+            var backdrop=overlay.GetComponent<Image>();backdrop.sprite=null;backdrop.color=new Color(0,0,0,.4f);
+            menuCard=overlay.transform.Find("Menu Card").GetComponent<Image>();normalCardSprite=menuCard.sprite;normalCardColor=menuCard.color;
+            cardOutline=menuCard.GetComponent<Outline>();if(cardOutline!=null)normalOutline=cardOutline.effectColor;
+        }
         public void SelectAction() { EventSystem.current?.SetSelectedGameObject(actionButton.gameObject); }
         void OnDestroy() { actionButton.onClick.RemoveListener(Activate); }
         void Activate()
@@ -42,13 +47,18 @@ namespace CountToZero
             focusStatus.text = g.SlowUntil > Time.unscaledTime ? "BULLET TIME ACTIVE" : "GRAZE BULLETS TO CHARGE";
             announcement.text = Time.unscaledTime < g.Feedback.MessageUntil ? g.Feedback.Message : "";
             announcement.color = g.Feedback.MessageColor;
-            status.text = g.Boss.Sucking ? "WARNING / ORB SIPHON" : g.Player.StunUntil > Time.time ? "ZERO OUT / STUNNED" : g.Player.OverchargeUntil > Time.time ? "OVERCHARGED / HOMING SHOTS" : "";
-            overlay.SetActive(g.State != GameState.Playing && g.State != GameState.Intro && !g.Controls.OptionsOpen);
+            status.text = g.Boss.LuckyNumberOnly ? "LUCKY NUMBER ONLY\nSHOTS BLOCKED" : g.Boss.Sucking ? "WARNING / ORB SIPHON" : g.Player.StunUntil > Time.time ? "ZERO OUT / STUNNED" : g.Player.OverchargeUntil > Time.time ? "OVERCHARGED / HOMING SHOTS" : (BattleExpansion.Instance!=null && BattleExpansion.Instance.SegmentsAlive>0?"BREAK VIRUS SEGMENTS / "+BattleExpansion.Instance.SegmentsAlive:g.Hazards!=null?g.Hazards.Label:"");
+            overlay.SetActive(g.State != GameState.Playing && g.State != GameState.Intro && g.State != GameState.Victory && !g.Controls.OptionsOpen);
             actionButton.interactable=!g.Controls.OptionsOpen;
             if (g.State != previousState)
             {
                 previousState=g.State;
-                if (g.State!=GameState.Playing && g.State!=GameState.Intro && !g.Controls.OptionsOpen) SelectAction();
+                bool dead=g.State==GameState.Lost;
+                // An opaque red result card; the world keeps its original colors.
+                menuCard.sprite=dead?null:normalCardSprite;menuCard.color=dead?new Color(.34f,.025f,.055f,1):normalCardColor;
+                if(cardOutline!=null)cardOutline.effectColor=dead?new Color(1,.16f,.25f):normalOutline;
+                overlayTitle.color=dead?new Color(1,.77f,.79f):Color.white;
+                if (g.State!=GameState.Playing && g.State!=GameState.Intro && g.State!=GameState.Victory && !g.Controls.OptionsOpen) SelectAction();
                 else EventSystem.current?.SetSelectedGameObject(null);
             }
             if (g.State == GameState.Playing) return;

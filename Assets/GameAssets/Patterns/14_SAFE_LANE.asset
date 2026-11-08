@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: 14_SAFE_LANE
   m_EditorClassIdentifier: Assembly-CSharp::CountToZero.BossPatternDefinition
   displayName: SAFE LANE
+  luckyNumberOnly: 1
   shot: 14
   motion: 4
   interval: 0.9

@@ -1,0 +1,1 @@
+PASS: 4 point-filtered 16x16 slices from gdb-switch-2.png; orange fire, white slide/focus, white Joystick Pack analog; safe-area touch surface. Desktop controls unchanged.

@@ -71,12 +71,12 @@ The authored flow is Title -> Preload -> Story (Next / Skip) -> CountToZero -> T
 The Preload slider reports actual `LoadSceneAsync` progress, normalized to activation.
 Scene UI and references are serialized; gameplay does not construct these screens.
 
-- 100 story levels, five blocks of 20. Each level has one of 20 distinct shot patterns and three boss health phases.
+- 30 story levels, adapting difficulty every 20 levels. Each level has one of 25 distinct shot patterns and three boss health phases.
 - Pattern assets: `Assets/GameAssets/Patterns`; tune movement, interval and speed in Inspector.
 - After each block, difficulty adapts to clear time, damage and failed attempts. Shot cadence and speed scale within 0.75-2.5x difficulty bounds.
 - Progress, score and block performance save locally. Continue resumes the next uncleared level; loss retries the same level.
-- Level 100 leads to StoryEnd. Skipping still shows the explicit Endless / Title choice.
-- Endless starts at level 101, cycles 20 patterns and continues block adaptation.
+- Level 30 leads to StoryEnd. Skipping still shows the explicit Endless / Title choice.
+- Endless starts at level 31, cycles 25 patterns and continues block adaptation.
 - Story text: `Assets/GameAssets/Dialogues/story_en.json`.
 
 Camera returns to the original centered `(0, 21, -18)` offset without sideways yaw or roll.
@@ -84,7 +84,7 @@ A six-second intro orbits the arena, moves in around the player, then settles at
 Combat is suspended during the intro. Mouse wheel and Ctrl+Up/Down zoom during gameplay; Ctrl+arrows do not move the player.
 Zoom limits, follow strength, offset and intro duration are editable on Arena Camera / FollowCamera.
 
-Editor: `Count To Zero / Build Campaign Scenes` authors missing scenes and wires 20 patterns.
+Editor: `Count To Zero / Build Campaign Scenes` authors missing scenes and wires 25 patterns.
 `Run Campaign Checks` validates progression, saves, UI raycasts, scene loads, intro, zoom, retry, ending and Endless.
 
 
@@ -108,3 +108,58 @@ Lucky cut-ins protect the player from all damage for their full visible duration
 `Game Audio / Persistent Mix` is authored in every scene; a single instance persists across scene loads. Nine distinct synth cues and three synchronized 96 BPM music stems react to training, combat, phase and pause. Music and SFX have separate saved sliders in Options. Audio assets are generated offline by `Tools/generate_polish_audio.py` (original synthesis, no external samples), not constructed at runtime. Do not run generation during gameplay.
 
 Use `Count To Zero / Validate First Minute and Retry` for automated checks. Human test protocol: `Documentation/first-playtest.md`; blank results sheet: `Documentation/playtest-results.csv`. Automated checks do not establish fun or replace testing with new players or real mobile WebGL devices.
+
+## Widescreen presentation
+
+Desktop defaults to borderless fullscreen at 1920 x 1080; WebGL defaults to 1280 x 720. All six screen canvases use a 16:9 reference resolution and PixelUISciFiFree cyan panels, buttons, progress bars and controls.
+
+FollowCamera smoothly moves from normal zoom at 10+ units from the boss to 85% orthographic size at 4 units or less. The closer view favors the midpoint between player and boss. Mouse-wheel/manual zoom remains available.
+
+The 48 x 64 hero sheet `Assets/GameAssets/Sprites/man/1 walk.png` is sliced into 16 x 16 sprites: column 2, all four rows, faces away during movement; column 1, all four rows, loops facing the viewer during victory. Actor HP appears over each character; duplicate HUD HP is hidden.
+
+Victory freezes combat, hides gameplay UI, plays a 1.4-second debris explosion with two white silhouette impacts, then holds the front-facing hero animation for 2.2 seconds before opening TurnEnd. Animation and effects use unscaled time. Campaign progress is saved at the win, before the presentation.
+
+Editor menu: `Count To Zero > Upgrade Widescreen Presentation` reapplies authored assets and scene bindings. `Run Presentation Checks` verifies theme references, frames, HP, proximity zoom, and the delayed victory transition, restoring the campaign save afterward.
+
+## Directional actors and enemy defeat
+
+The arena uses XZ movement; screen-up corresponds to increasing Z. The hero faces forward (column 1) above the boss and backward (column 2) below it. Victory always overrides this with the forward-facing loop.
+
+All six pooled minions use `man/8walk.png`, columns 1 and 2, with four 16 x 16 frames per direction. They face forward when the player is below them and backward when the player is above. Defeat emits an independently pooled, point-filtered white pixel ring that expands over 0.45 seconds, fades, and resets safely when the encounter restarts. Despawning does not emit a defeat effect.
+
+Editor: `Upgrade Enemy Facing and Death FX` and `Run Enemy Presentation Checks` under Count To Zero.
+
+## Difficulty and Lucky punch polish
+
+Player and spawned enemy artwork is now 0.85 scale (50% of the prior 1.7). Victory preserves the original sprite colors even when overcharge was active. Small-enemy hit and contact radii and the player's projectile hit radius are reduced to match the smaller artwork.
+
+Every ten campaign levels increases the encounter tier, up to tier 9. Block waves scatter across valid locations with at least two units between blocks and clearance around the player; the count grows from 2 to 8 and the event interval decreases with level, phase and adaptive difficulty. The 1.5-second landing warning remains. Blocks repeat purple/white/black colors using per-renderer property blocks, including while falling. Later waves also summon up to three minions.
+
+Minions begin firing at level 6; level 21 adds three-shot fans, and level 61 adds five-shot fans. Shot cadence and projectile speed increase with level, with caps. The Lucky cut-in keeps its lower-left position and animates column 1 of `1 punch.png` with point filtering, a fixed transparent-padding crop, and white tint.
+
+Editor: `Upgrade Difficulty and Lucky Punch`; validation: `Run Difficulty Polish Checks`.
+
+## Micro-circuit sectors and art (2026-11-09)
+
+New campaigns save a randomized hazard seed. Levels 1–2 remain normal; subsequent sectors mix normal, conveyor, red-laser and (from level 15) combined modes. Retrying a level keeps its sector mode. The HUD labels special sectors.
+
+Conveyor sectors slide the floor grid and obstacles downward. Block waves spawn upstream with an escape lane and the existing landing warning. Blocks live long enough to cross the arena; solid blocks push the player downward, and being trapped against the bottom arena/view boundary is lethal. Motion and hazard timers stop during pause, training and results.
+
+Red barriers telegraph for 1.2 seconds, fire for 2 seconds and rest for 2 seconds. Crossing detection includes fast/dash movement. A hit removes 2.5 of the player's 5 max HP (exactly 50%), knocks back toward the approach side, and grants the normal brief damage immunity. HP labels support halves. The line retains visible red intensity throughout its active flicker.
+
+The story prologue now introduces transferring GLITCH-0's body into OMEGA-99's microscopic circuitry. Perimeter traces and contacts use cyan, green, gold and violet, with multicolor signal lights.
+
+Aseprite source files: `ArtSource/`. Reproducible editing script: `Tools/redraw_micro_sprites.lua`, run with the installed Aseprite CLI. Hero idle/walk/punch sheets now share spiky brown hair, brown eyes and a white shirt. Six pooled minions randomly choose among gunmetal, teal scout and bronze heavy red-eye robots.
+
+Original sheets and removed Unity template files: `Backup/2026-11-09-before-micro-circuit/`. Cleanup details: `Documentation/asset-cleanup-audit.md`. Editor menus: `Upgrade Micro Circuit Sectors` and `Run Micro Circuit Checks`.
+
+UI readability and feedback update: enlarged body labels, dialogue and story text across six scenes. PixelUISciFiFree buttons now use mint, violet and gold accents with unscaled hover/focus growth, press compression and outlines. New audio: wobble (hover), Choose (click), Explosion (enemy/boss destruction), GameOver (defeat). Menu cameras include audio listeners. Validation: Documentation/readable-ui-checks.txt (41 passing checks) and readable-story.png.
+
+Battle expansion: Easy/Normal/Hard; two Aseprite assistants (maximum four, independent HP and attacks); white/black assistant debris and loss notice; red player impact/death pixels; 25 patterns including square rush/rest and five protected serpent segments. Later enemy waves accelerate every four levels. Falling blocks have red circles; tracking lightning has warning circles, white cores and cyan outlines.
+Three original 4:3 Aseprite comic panels accompany the story. Level 30 defeats Virus/Super Com and offers Infinite from level 31. Audio options include asset credits; unidentified source authors are explicitly marked. Art sources: ArtSource/assistant_*.aseprite and cutscene_*.aseprite. Rebuild: Count To Zero / Build Battle Expansion.
+
+Mobile controls: four point-filtered slices from Assets/GameAssets/UI/gdb-switch-2.png skin Joystick Pack and orange FIRE / white SLIDE and FOCUS controls. Touch layout follows Screen.safeArea. Fire tracks its owning touch so another finger cannot release it. Editor menu: Count To Zero / Apply Switch Mobile Controls. Validation: Documentation/mobile-skin-checks.txt; screenshot: Documentation/mobile-controls.png.
+
+Title menu layout: Assets/Scenes/Title.unity > Screen Canvas > Title Menu contains Home, Difficulty, Options and Credits. All 11 buttons and both audio sliders are scene-authored and editable without Play Mode; TitleMenuView handles page navigation. Original title scene: Backup/TitleLayout/Title-before-layout.unity.
+
+Lucky-only boss armor: Broken Halo (level 6), Safe Lane (15), Rotating Gate (18) and Orbit Mines (24) reject all ordinary/charged/assistant shots, even during a crash. Matching the Lucky Rule deals direct damage (19 exact, 10 other rule types); other patterns retain their existing behavior. Edit luckyNumberOnly on each BossPatternDefinition in the Inspector. A separate metallic Blocked cue, white hit flash and persistent HUD instruction explain immunity; feedback is rate-limited.

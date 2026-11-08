@@ -5,6 +5,8 @@ namespace CountToZero
 {
     [Serializable] public class CampaignSave
     {
+        public int hazardSeed;
+        public int selectedDifficulty=1;
         public int level=1, cleared, blocks, totalScore, failures, blockWins, blockDamage;
         public float difficulty=1, blockSeconds;
         public bool endless, storySeen, endingSeen, introSeen, tutorialComplete;
@@ -16,16 +18,16 @@ namespace CountToZero
         public static bool Active { get; private set; }
         public static bool LastWon { get; private set; }
         public static bool BlockComplete { get; private set; }
-        public static bool NeedsEnding => Data.cleared==100 && !Data.endingSeen;
+        public static bool NeedsEnding => Data.cleared>=30 && !Data.endless && !Data.endingSeen;
         public static string LastCause="";
         public static float PreviousDifficulty=1;
         public static string NextScene="Story";
-        public static int PatternIndex => (Data.level-1)%20;
+        public static int PatternIndex => (Data.level-1)%25;
         public static int Block => (Data.level-1)/20+1;
         public static bool HasSave => PlayerPrefs.HasKey(SaveKey);
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]
         static void ResetStatics(){Active=false;Data=new CampaignSave();NextScene="Story";LastWon=BlockComplete=false;}
-        public static void NewGame(){Data=new CampaignSave();LastWon=BlockComplete=false;Active=true;Save();}
+        public static void NewGame(int difficulty=1){Data=new CampaignSave { hazardSeed=UnityEngine.Random.Range(1,1000000), selectedDifficulty=difficulty, difficulty=difficulty==0?.75f:difficulty==2?1.4f:1 };LastWon=BlockComplete=false;Active=true;Save();}
         public static bool Resume()
         {
             try { var saved=JsonUtility.FromJson<CampaignSave>(PlayerPrefs.GetString(SaveKey,""));
@@ -47,7 +49,7 @@ namespace CountToZero
             Save();
         }
         public static void Advance(){if(LastWon)Data.level++;Save();}
-        public static void EnableEndless(){Data.endless=true;Data.endingSeen=true;Data.level=Mathf.Max(101,Data.cleared+1);Save();}
+        public static void EnableEndless(){Data.endless=true;Data.endingSeen=true;Data.level=Mathf.Max(31,Data.cleared+1);Save();}
         public static void Save(){PlayerPrefs.SetString(SaveKey,JsonUtility.ToJson(Data));PlayerPrefs.Save();}
         public static void Leave(){Active=false;Time.timeScale=1;}
     }

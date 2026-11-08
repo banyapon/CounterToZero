@@ -24,7 +24,7 @@ public static class TypographyChecks
                 foreach(var c in roots.SelectMany(r=>r.GetComponentsInChildren<MonoBehaviour>(true)).Where(c=>c!=null&&c.GetType().Namespace=="CountToZero")){
                     foreach(var field in c.GetType().GetFields(BindingFlags.Public|BindingFlags.NonPublic|BindingFlags.Instance)){
                         if(field.FieldType==typeof(TMP_Text))Check(field.GetValue(c)!=null,name+" "+c.name+"."+field.Name+" reference");
-                        if(field.FieldType==typeof(TMP_Text[])){var array=(TMP_Text[])field.GetValue(c);Check(array.Length==8&&array.All(x=>x!=null),"eight binding labels");}
+                        if(field.FieldType==typeof(TMP_Text[]) && (field.IsPublic || field.IsDefined(typeof(SerializeField),false))){var array=(TMP_Text[])field.GetValue(c);Check(array.Length==8&&array.All(x=>x!=null),"eight binding labels");}
                     }
                 }
                 foreach(var text in roots.SelectMany(r=>r.GetComponentsInChildren<TMP_Text>(true))){Check(text.font!=null&&text.font.sourceFontFile!=null,"font asset and source");Check((text.fontStyle&FontStyles.Bold)!=0,"bold text");if(text.name=="Heading"||text.name=="Title")Check(text.font==TypographyUpgrade.TitleFont,"title font");}

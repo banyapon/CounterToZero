@@ -43,7 +43,7 @@ namespace CountToZero
             marker.gameObject.SetActive(Active&&!intro&&(Step==TutorialStep.Move||Step==TutorialStep.Lucky));
             if(intro){Show("intro");skipLabel.text="SKIP INTRO";progress.fillAmount=0;var k=Keyboard.current;var p=Gamepad.current;if((k!=null&&(k.enterKey.wasPressedThisFrame||k.spaceKey.wasPressedThisFrame))||(p!=null&&p.buttonSouth.wasPressedThisFrame))Game.SkipIntro();return;}
             if(!Active||Game.State!=GameState.Playing)return;
-            if(Gamepad.current!=null&&Gamepad.current.selectButton.wasPressedThisFrame){Skip();return;}
+            if((Keyboard.current!=null&&Keyboard.current.tabKey.wasPressedThisFrame)||(Gamepad.current!=null&&Gamepad.current.selectButton.wasPressedThisFrame)){Skip();return;}
             age+=Time.deltaTime;skipLabel.text="SKIP TRAINING";progress.fillAmount=((int)Step-1)/6f;Show(Step.ToString().ToLowerInvariant());
             marker.transform.position=orbSpawn.position+Vector3.up*.04f;
             if(Step==TutorialStep.Move && Vector3.Distance(origin,Game.Player.transform.position)>.9f){Game.Orbs.SpawnTraining(orbSpawn.position,MathOpType.Add,6);SetStep(TutorialStep.Lucky);}

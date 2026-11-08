@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: 17_ROTATING_GATE
   m_EditorClassIdentifier: Assembly-CSharp::CountToZero.BossPatternDefinition
   displayName: ROTATING GATE
+  luckyNumberOnly: 1
   shot: 17
   motion: 2
   interval: 0.9
