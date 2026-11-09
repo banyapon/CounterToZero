@@ -1,0 +1,1 @@
+PASS: Story and StoryEnd use 60/40 artwork/text columns; all prologue and ending/Endless text fits, both buttons remain within their column. Screenshots captured.

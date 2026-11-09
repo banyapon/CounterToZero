@@ -43,19 +43,32 @@ namespace CountToZero
             Rule = LuckyRuleEngine.Create(RuleType.ExactMatch,7); RuleTime = 15; State = GameState.Title;
         }
         void Start(){if(!Campaign.Active&&!Campaign.Resume())Campaign.NewGame();BeginIntro();}
-        public void BeginIntro(){Begin();if(!Campaign.Active||Campaign.Data.introSeen)return;State=GameState.Intro;View.GetComponent<FollowCamera>().StartIntro();}
-        public void SkipIntro(){if(State!=GameState.Intro)return;View.GetComponent<FollowCamera>().Snap();CompleteIntro();}
-        public void CompleteIntro(){if(State==GameState.Intro){State=GameState.Playing;if(Campaign.Active){Campaign.Data.introSeen=true;Campaign.Save();}Dialogue.Say("intro");}}
+        public bool CountingDown { get; private set; }
+        public void BeginIntro()=>Begin();
+        public void SkipIntro(){if(State!=GameState.Intro||CountingDown)return;View.GetComponent<FollowCamera>().Snap();CompleteIntro();}
+        public void CompleteIntro(){if(State==GameState.Intro&&!CountingDown)StartCoroutine(StartRound());}
+        System.Collections.IEnumerator StartRound()
+        {
+            CountingDown=true;
+            var countdown=GetComponent<RoundCountdown>();
+            if(countdown==null)countdown=gameObject.AddComponent<RoundCountdown>();
+            yield return countdown.Play();
+            CountingDown=false;
+            State=GameState.Playing;
+            if(Campaign.Active){Campaign.Data.introSeen=true;Campaign.Save();}
+            Dialogue.Say("intro");
+        }
         public void Begin()
         {
-            StopAllCoroutines(); GetComponent<VictorySequence>()?.ResetPresentation();
+            StopAllCoroutines(); CountingDown=false; GetComponent<RoundCountdown>()?.Hide(); GetComponent<VictorySequence>()?.ResetPresentation();
             DamageTaken=0; Score = new ScoreManager(); Phase = 1; Elapsed = 0; SlowUntil = HazardUntil = 0;
             GetComponent<BattleExpansion>()?.ResetBattle();
             Bullets.Clear(); Orbs.Clear(); Player.ResetRun(); Boss.ResetRun(); if(Campaign.Active)Boss.SelectPattern(Campaign.PatternIndex); Encounters.ResetRun(); CutIn.Clear();
             Feedback.ResetFeedback(); Rule = LuckyRuleEngine.Create(RuleType.ExactMatch,7); RuleTime = 15;
-            State = GameState.Playing; Time.timeScale = 1;
-            View.GetComponent<FollowCamera>().Snap(); Dialogue.Say("intro");
+            State = GameState.Intro; Time.timeScale = 1;
+            View.GetComponent<FollowCamera>().Snap();
             Orbs.SeedOpening(); Tutorial?.ResetForRun(); Hazards?.ResetRun(); hazard.gameObject.SetActive(false); Feedback.Announce("BREACH THE DETERMINISTIC CORE", ArenaVisuals.Cyan);
+            View.GetComponent<FollowCamera>().StartIntro();
         }
         void Update()
         {
@@ -95,11 +108,12 @@ namespace CountToZero
             {
                 Player.ProtectCutIn(); CutIn.Show(); Tutorial?.LuckyMatched(); Dialogue.Say("lucky");
                 Score.Award(1000, Rule.DifficultyMultiplier, RuleTime >= 12 ? 2500 : 0);
-                if (exact) { Bullets.ClearEnemy(); Feedback.Laser(Player.transform.position, Boss.transform.position); DamageBoss(19, true, BossDamageSource.LuckyNumber); }
+                Feedback.Laser(Player.transform.position, Boss.transform.position);
+                if (exact) { Bullets.ClearEnemy(); DamageBoss(19, true, BossDamageSource.LuckyNumber); }
                 else
                 {
                     Player.OverchargeUntil = Time.time + 5;
-                    if(Boss.LuckyNumberOnly){Feedback.Laser(Player.transform.position,Boss.transform.position);DamageBoss(10,true,BossDamageSource.LuckyNumber);}
+                    if(Boss.LuckyNumberOnly)DamageBoss(10,true,BossDamageSource.LuckyNumber);
                 }
             }
             else if (exact) Player.Hurt(true,"Boss Lucky counter");

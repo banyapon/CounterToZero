@@ -66,6 +66,7 @@ namespace CountToZero
             foreach (var f in fragments) f.gameObject.SetActive(false);
             bossVisual.enabled = false; heroVisual.color = Color.white;
             hero.Celebrating = true;
+            g.GetComponent<BattleExpansion>()?.CelebrateVictory();
             yield return new WaitForSecondsRealtime(celebrationDuration);
             active = false;
             // A campaign loads its result screen next; standalone play uses the HUD.

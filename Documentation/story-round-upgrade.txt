@@ -1,0 +1,1 @@
+PASS: four cutscene references, three prologue panels, ending art and bold readable labels on 39 button texts. Round countdown authored in gameplay scene.

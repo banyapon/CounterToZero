@@ -1,0 +1,1 @@
+PASS: 21 audio checks; looping Title/gameplay and Story/ending tracks, immediate Options BGM/SFX volume and mute, persistent settings, four separate countdown beeps, no overlapping old music. Original preferences and campaign restored.

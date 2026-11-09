@@ -38,6 +38,7 @@ namespace CountToZero
         void Complete(){Step=TutorialStep.Off;marker.gameObject.SetActive(false);panel.SetActive(false);if(Campaign.Active){Campaign.Data.tutorialComplete=true;Campaign.Save();}Game.Begin();Game.Feedback.Announce("PRACTICE COMPLETE / LIVE ROUND",ArenaVisuals.Green);GameAudio.Play(SoundCue.Phase);}
         void Update()
         {
+            if(Game.CountingDown){panel.SetActive(false);marker.gameObject.SetActive(false);return;}
             bool intro=Game.State==GameState.Intro;
             panel.SetActive((intro||Active)&&Game.State!=GameState.Paused&&!Game.Controls.OptionsOpen);
             marker.gameObject.SetActive(Active&&!intro&&(Step==TutorialStep.Move||Step==TutorialStep.Lucky));

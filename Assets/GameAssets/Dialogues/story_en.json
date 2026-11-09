@@ -1,14 +1,11 @@
 {
   "intro": [
-    "SYSTEM: Body transfer ready. Destination: the microscopic circuits inside OMEGA-99.",
-    "GLITCH-0: Upload me. If the core is rewriting our world, I will stop it from the inside.",
-    "Your body dissolves into a stream of light. Copper traces become highways. A single microchip becomes an entire world.",
-    "OMEGA-99: Unauthorized life detected. Deploying red-eye sentinels.",
-    "Survive shifting conveyor sectors and red laser barriers. Match the Lucky Rules and reach the heart of the circuit."
+    "OMEGA-99 has seized the city network. GLITCH-0 and GLITCH SQUAD enter its circuits to shut down the rogue AI before the city falls.",
+    "Behind the firewall, GLITCH SQUAD battles sentinels and a storm of hostile code. The green and gold assistants cover GLITCH-0 as the team pushes deeper.",
+    "At the core, OMEGA-99 unleashes its final defenses. GLITCH-0 leads the squad through shifting sectors, fighting together to bring the system down."
   ],
   "ending": [
-    "SYSTEM: Sector 30 secured. The Virus has been erased. Super Com is defeated.",
-    "GLITCH-0: We did it together. The circuit is free, and our assistants are coming home.",
-    "A new signal crosses the network. Will you keep protecting the system? Choose YES for Infinite mode."
+    "GLITCH-0 lands the final strike. OMEGA-99 goes offline, and the city systems return to their people. GLITCH SQUAD stands together in victory.",
+    "The green and gold assistants regroup with GLITCH-0. The city is safe, but new threats still echo through the network."
   ]
 }

@@ -186,15 +186,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: CONTINUE
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cddbbd7405d5bf54ea2414fd206d4bf3, type: 2}
-  m_sharedMaterial: {fileID: 4678915102793385906, guid: cddbbd7405d5bf54ea2414fd206d4bf3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 0.86, g: 1, b: 0.952, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -211,11 +211,11 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26
+  m_fontSize: 30
   m_fontSizeBase: 25.96
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 24
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 20
   m_fontSizeMax: 32
   m_fontStyle: 1
   m_HorizontalAlignment: 2
@@ -228,7 +228,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -423,12 +423,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26
+  m_fontSize: 100
   m_fontSizeBase: 23.599998
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 23.599998
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 23.599998
+  m_fontSizeMax: 100
   m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
@@ -462,7 +462,7 @@ MonoBehaviour:
   m_VertexBufferAutoSizeReduction: 0
   m_useMaxVisibleDescender: 1
   m_pageToDisplay: 1
-  m_margin: {x: 0, y: 0, z: 0, w: 0}
+  m_margin: {x: 0, y: 0, z: 0, w: -55.422913}
   m_isUsingLegacyAnimationComponent: 0
   m_isVolumetricText: 0
   m_hasFontAssetChanged: 0
@@ -936,7 +936,7 @@ AudioSource:
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
-  m_Resource: {fileID: 8300000, guid: fab9c8f62ed146b41a63d493f3a04808, type: 3}
+  m_Resource: {fileID: 8300000, guid: d81058948862f7b43b8c3695c6640f02, type: 3}
   m_PlayOnAwake: 0
   m_Volume: 0
   m_Pitch: 1
@@ -1853,7 +1853,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.9405, g: 0.84250003, b: 1, a: 1}
+  m_Color: {r: 0.18, g: 0.26, b: 0.34, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2653,7 +2653,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: UnityEngine.UI::UnityEngine.UI.Image
   m_Material: {fileID: 0}
-  m_Color: {r: 0.755, g: 1, b: 0.916, a: 1}
+  m_Color: {r: 0.18, g: 0.26, b: 0.34, a: 1}
   m_RaycastTarget: 1
   m_RaycastPadding: {x: 0, y: 0, z: 0, w: 0}
   m_Maskable: 1
@@ -2831,15 +2831,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: BACK
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cddbbd7405d5bf54ea2414fd206d4bf3, type: 2}
-  m_sharedMaterial: {fileID: 4678915102793385906, guid: cddbbd7405d5bf54ea2414fd206d4bf3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontColor: {r: 0.966, g: 0.91, b: 1, a: 1}
+  m_fontColor: {r: 1, g: 1, b: 1, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2856,11 +2856,11 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 26
+  m_fontSize: 30
   m_fontSizeBase: 25.96
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 24
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 20
   m_fontSizeMax: 32
   m_fontStyle: 1
   m_HorizontalAlignment: 2
@@ -2873,7 +2873,7 @@ MonoBehaviour:
   m_lineSpacingMax: 0
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
-  m_TextWrappingMode: 1
+  m_TextWrappingMode: 0
   m_wordWrappingRatios: 0.4
   m_overflowMode: 0
   m_linkedTextComponent: {fileID: 0}
@@ -3080,6 +3080,14 @@ MonoBehaviour:
   - cue: 12
     clip: {fileID: 8300000, guid: dfea3daf7aea6bc4bb2731c36410858c, type: 3}
     volume: 0.55
+  - cue: 13
+    clip: {fileID: 8300000, guid: f40bf70111666a24fb4975a893b001ba, type: 3}
+    volume: 0.75
+  - cue: 14
+    clip: {fileID: 8300000, guid: 6f860c0e09702ce458750859e41118c0, type: 3}
+    volume: 0.75
+  titleMusic: {fileID: 8300000, guid: d81058948862f7b43b8c3695c6640f02, type: 3}
+  storyMusic: {fileID: 8300000, guid: 8cc9386995cb5c641847ec7d65fe55f1, type: 3}
 --- !u!4 &2109547417
 Transform:
   m_ObjectHideFlags: 0

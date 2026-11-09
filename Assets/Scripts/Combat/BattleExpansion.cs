@@ -26,6 +26,11 @@ namespace CountToZero
   SpriteRenderer Sprite(string name,Vector3 p,Sprite art,float scale){var s=new GameObject(name).AddComponent<SpriteRenderer>();s.transform.SetParent(transform);s.transform.position=p;s.sprite=art;s.transform.localScale=Vector3.one*scale;s.sortingOrder=8;return s;}
   public void ResetBattle(){snakeCreated=false;foreach(var a in allies)Destroy(a.root.gameObject);allies.Clear();foreach(var s in segments)Destroy(s.gameObject);segments.Clear();segmentHP.Clear();foreach(var d in debris)Destroy(d.visual.gameObject);debris.Clear();spawnAt=4;lightningAt=12;lightningAge=-1;if(bolt!=null)bolt.enabled=boltGlow.enabled=ring.enabled=false;if(lossNotice!=null)lossNotice.text="";}
   public bool SpawnAssistant(){if(allies.Count>=4||assistantFrames==null||assistantFrames.Length<16)return false;int style=allies.Count%2;var root=new GameObject("Assistant").transform;root.SetParent(transform);root.position=G.Player.transform.position+Vector3.right*(allies.Count%2==0?-1:1);var v=Sprite("Assistant Visual",root.position+Vector3.up*.7f,assistantFrames[style*8],.85f);v.transform.SetParent(root,true);var text=new GameObject("Assistant label").AddComponent<TextMeshPro>();text.transform.SetParent(v.transform,false);text.transform.localPosition=new Vector3(0,1,0);text.fontSize=2.8f;text.alignment=TextAlignmentOptions.Center;text.rectTransform.sizeDelta=new Vector2(5,1);text.color=Color.white;allies.Add(new Ally{root=root,visual=v,label=text,style=style});return true;}
+  // Surviving squad members turn toward the camera before the result panel.
+  public void CelebrateVictory()
+  {
+   foreach(var ally in allies){ally.visual.sprite=assistantFrames[ally.style*8];ally.visual.transform.rotation=G.View.transform.rotation;ally.visual.color=Color.white;ally.label.gameObject.SetActive(false);}
+  }
   public void Burst(Vector3 position,Color color,bool alternate,int count=40){for(int i=0;i<count;i++){var s=Sprite("Pixel debris",position,pixel,Random.Range(.06f,.18f));s.color=color;debris.Add(new Debris{visual=s,velocity=Random.onUnitSphere*Random.Range(2,6),color=color,alternate=alternate});}if(alternate)GameAudio.Play(SoundCue.Explosion);}
   void HurtAlly(Ally a,float damage=1){if(Time.time<a.immune)return;a.immune=Time.time+1;a.hp-=damage;if(a.hp>0)return;Burst(a.root.position,Color.white,true);Destroy(a.root.gameObject);allies.Remove(a);if(lossNotice!=null){lossNotice.text="\u0e40\u0e23\u0e32\u0e2a\u0e39\u0e0d\u0e40\u0e2a\u0e35\u0e22\u0e1c\u0e39\u0e49\u0e0a\u0e48\u0e27\u0e22\u0e41\u0e25\u0e49\u0e27\nWE LOST AN ASSISTANT";noticeUntil=Time.unscaledTime+4;}}
   public bool HitAssistant(Vector3 a,Vector3 b){foreach(var ally in allies)if(BulletPattern.SegmentDistance(ally.root.position,a,b)<.3f){HurtAlly(ally);return true;}return false;}
@@ -38,6 +43,7 @@ namespace CountToZero
    if(G==null)return;
    for(int i=debris.Count-1;i>=0;i--){var d=debris[i];if(G.State==GameState.Paused)continue;d.age+=Time.unscaledDeltaTime;d.visual.transform.position+=d.velocity*Time.unscaledDeltaTime;d.visual.transform.rotation=G.View.transform.rotation;var c=d.alternate?(Mathf.FloorToInt(d.age*14)%2==0?Color.white:Color.black):d.color;c.a=1-d.age/.85f;d.visual.color=c;if(d.age>=.85f){Destroy(d.visual.gameObject);debris.RemoveAt(i);}}
    if(lossNotice!=null && Time.unscaledTime>noticeUntil)lossNotice.text="";
+   if(G.State==GameState.Victory||G.State==GameState.Won){foreach(var ally in allies)ally.visual.transform.rotation=G.View.transform.rotation;}
    if(G.State!=GameState.Playing||G.Training){bolt.enabled=boltGlow.enabled=ring.enabled=false;return;}
    if(lastLevel!=Campaign.Data.level){lastLevel=Campaign.Data.level;snakeCreated=false;}
    bool snake=G.Boss.PatternIndex==21;

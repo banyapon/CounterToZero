@@ -32,10 +32,14 @@ namespace CountToZero
         public void StartDifficulty(int difficulty){Campaign.NewGame(difficulty);Go("Story");}
         public int StoryLine => line;
         public CampaignPage Page => page;
+        public TMP_Text Heading => heading;
+        public TMP_Text Body => body;
+        public Button PrimaryButton => primary;
+        public Button SecondaryButton => secondary;
         void EndStory()
         {
             if(page==CampaignPage.Story){Campaign.Data.storySeen=true;Campaign.Save();Go("CountToZero");}
-            else{Campaign.Data.endingSeen=true;Campaign.Save();line=lines.Length;heading.text="BEYOND ZERO";body.text="Virus and Super Com defeated.\nKeep protecting the system?\nInfinite sectors await.";primaryLabel.text="YES / ENDLESS";secondaryLabel.text="NO / TITLE";}
+            else{Campaign.Data.endingSeen=true;Campaign.Save();line=lines.Length;heading.text="GLITCH SQUAD / VICTORY";body.text="OMEGA-99 is offline. The city is safe.\nKeep fighting new threats with GLITCH SQUAD?";primaryLabel.text="YES / ENDLESS";secondaryLabel.text="NO / TITLE";}
         }
         void Primary()
         {
