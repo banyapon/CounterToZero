@@ -12,6 +12,8 @@ namespace CountToZero
         [SerializeField] CueClip[] cues;
         [SerializeField] AudioClip titleMusic,storyMusic;
         float shotAt,warningAt,hoverAt,explosionAt;
+        // Leave headroom for combat/UI effects while keeping both Options sliders independent.
+        public const float MusicMixGain=.2f;
         public static float MusicVolume=>PlayerPrefs.GetFloat("CountToZero.Music",.5f);
         public static float EffectsVolume=>PlayerPrefs.GetFloat("CountToZero.SFX",.75f);
         [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.SubsystemRegistration)]static void ResetStatic(){Instance=null;}
@@ -33,7 +35,7 @@ namespace CountToZero
             if(clip==null||bed.clip==clip&&bed.isPlaying)return;
             bed.Stop();bed.clip=clip;bed.Play();
         }
-        void ApplyVolumes(){bed.volume=MusicVolume;effects.volume=EffectsVolume;pulse.volume=danger.volume=0;}
+        void ApplyVolumes(){bed.volume=MusicVolume*MusicMixGain;effects.volume=EffectsVolume;pulse.volume=danger.volume=0;}
         public static void SetMusic(float volume){PlayerPrefs.SetFloat("CountToZero.Music",Mathf.Clamp01(volume));if(Instance!=null)Instance.ApplyVolumes();}
         public static void SetEffects(float volume){PlayerPrefs.SetFloat("CountToZero.SFX",Mathf.Clamp01(volume));if(Instance!=null)Instance.ApplyVolumes();}
         public static void Play(SoundCue cue){if(Instance!=null)Instance.PlayCue(cue);}

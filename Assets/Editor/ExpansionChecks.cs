@@ -28,7 +28,7 @@ public static class ExpansionChecks
   for(int i=0;i<6;i++)e.SpawnAssistant();Check(e.AssistantCount==4,"four assistant cap");Next();break;
  case 2:
   var ally=GameObject.Find("Assistant");Check(ally!=null,"assistant visible");for(int i=0;i<3;i++){e.HitAssistant(ally.transform.position,ally.transform.position);var field=typeof(BattleExpansion).GetField("allies",System.Reflection.BindingFlags.NonPublic|System.Reflection.BindingFlags.Instance);var list=(System.Collections.IList)field.GetValue(e);if(list.Count>0)list[0].GetType().GetField("immune").SetValue(list[0],0f);}
-  Check(e.AssistantCount==3,"assistant takes projectile damage and dies");Check(GameObject.Find("Assistant Loss Notice").GetComponent<TMPro.TMP_Text>().text.Contains("LOST"),"bottom right death notification");Check(GameObject.Find("Pixel debris")!=null,"pixel explosion created");
+  Check(e.AssistantCount==3,"assistant takes projectile damage and dies");Check(GameObject.Find("Assistant Loss Notice").GetComponent<TMPro.TMP_Text>().text=="Warning!!!","bottom right death notification");Check(GameObject.Find("Pixel debris")!=null,"pixel explosion created");
   g.Boss.SelectPattern(20);g.Boss.enabled=true;g.Player.Heal();Next(1);break;
  case 3:Check(g.Boss.PatternIndex==20,"square rush pattern selected");g.Boss.SelectPattern(22);Next(1);break;
  case 4:g.Boss.SelectPattern(23);Next(1);break;

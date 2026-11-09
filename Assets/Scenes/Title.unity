@@ -2257,7 +2257,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: DAYDEV CO., LTD.
+  m_text: DAYDEV CO., LTD. & Ad-Hoc Aliance Team
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: cddbbd7405d5bf54ea2414fd206d4bf3, type: 2}
   m_sharedMaterial: {fileID: 4678915102793385906, guid: cddbbd7405d5bf54ea2414fd206d4bf3, type: 2}
@@ -2811,15 +2811,15 @@ MonoBehaviour:
       m_Calls: []
   m_text: THE MICRO CIRCUIT SQUAD
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: cddbbd7405d5bf54ea2414fd206d4bf3, type: 2}
-  m_sharedMaterial: {fileID: 4678915102793385906, guid: cddbbd7405d5bf54ea2414fd206d4bf3, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 2cb247d4a7a583748a52656b8d2c4250, type: 2}
+  m_sharedMaterial: {fileID: 2420094134792823751, guid: 2cb247d4a7a583748a52656b8d2c4250, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
   m_fontColor32:
     serializedVersion: 2
-    rgba: 4294966528
-  m_fontColor: {r: 0, g: 0.99020815, b: 1, a: 1}
+    rgba: 4289586663
+  m_fontColor: {r: 0.9056604, g: 0.8980929, b: 0.6792453, a: 1}
   m_enableVertexGradient: 0
   m_colorMode: 3
   m_fontColorGradient:
@@ -2836,12 +2836,12 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 45
+  m_fontSize: 18
   m_fontSizeBase: 45
   m_fontWeight: 400
-  m_enableAutoSizing: 0
-  m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_enableAutoSizing: 1
+  m_fontSizeMin: 15
+  m_fontSizeMax: 18
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 512
@@ -11847,7 +11847,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1.4071138
+    width: 1.406683
     height: 1
 --- !u!114 &2100000004
 MonoBehaviour:
@@ -11933,7 +11933,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 0.3598439
+    width: 0.3597337
     height: 1
 --- !u!114 &2100000014
 MonoBehaviour:
@@ -12019,7 +12019,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 0.89340556
+    width: 0.893132
     height: 1
 --- !u!114 &2100000024
 MonoBehaviour:
@@ -12105,7 +12105,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1.1270468
+    width: 1.1267017
     height: 1
 --- !u!114 &2100000034
 MonoBehaviour:
@@ -12191,7 +12191,7 @@ MonoBehaviour:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 1.2811685
+    width: 1.2807761
     height: 1
 --- !u!114 &2100000044
 MonoBehaviour:

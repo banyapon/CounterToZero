@@ -41,7 +41,7 @@ public static class SceneMusicChecks
         if(!running)
         {
             const string request="Temp/ctz-scene-music-check.request";
-            if(!File.Exists(request)||EditorApplication.isCompiling||EditorApplication.isUpdating||EditorApplication.isPlayingOrWillChangePlaymode)return;
+            if(!File.Exists(request)||EditorApplication.isPlaying||EditorApplication.isCompiling||EditorApplication.isUpdating||EditorApplication.isPlayingOrWillChangePlaymode)return;
             File.Delete(request);var scene=SceneManager.GetActiveScene();if(scene.isDirty)EditorSceneManager.SaveScene(scene);SessionState.SetString("Music.Scene",scene.path);
             foreach(string key in new[]{"CountToZero.Music","CountToZero.SFX","CountToZero.Campaign.v1"})
             {SessionState.SetBool("Music.Had."+key,PlayerPrefs.HasKey(key));if(key.EndsWith("v1"))SessionState.SetString("Music.Value."+key,PlayerPrefs.GetString(key,""));else SessionState.SetFloat("Music.Value."+key,PlayerPrefs.GetFloat(key));}
@@ -55,8 +55,9 @@ public static class SceneMusicChecks
                 Check(Source("bed").clip.name=="title"&&Source("bed").isPlaying&&Source("bed").loop,"title.mp3 looping on title");
                 var view=UnityEngine.Object.FindAnyObjectByType<TitleMenuView>();var so=new SerializedObject(view);
                 ((Slider)so.FindProperty("music").objectReferenceValue).value=.23f;((Slider)so.FindProperty("sfx").objectReferenceValue).value=.31f;
-                Check(Mathf.Approximately(Source("bed").volume,.23f),"Options BGM updates immediately");
+                Check(Mathf.Approximately(Source("bed").volume,.23f*GameAudio.MusicMixGain),"Options BGM updates immediately");
                 Check(Mathf.Approximately(Source("effects").volume,.31f),"Options SFX updates immediately");
+                GameAudio.SetMusic(1);GameAudio.SetEffects(1);Check(Source("bed").volume<Source("effects").volume,"BGM mix stays below SFX at equal slider settings");
                 GameAudio.SetMusic(0);GameAudio.SetEffects(0);Check(Source("bed").volume==0&&Source("effects").volume==0,"both sliders can mute");
                 GameAudio.SetMusic(.23f);GameAudio.SetEffects(.31f);SceneManager.LoadScene("Story");Next();break;
             case 1:Check(Source("bed").clip.name=="story"&&Source("bed").isPlaying,"story.mp3 on story");SceneManager.LoadScene("StoryEnd");Next();break;
@@ -64,16 +65,28 @@ public static class SceneMusicChecks
             case 3:
                 Check(Source("bed").clip.name=="title"&&Source("bed").isPlaying,"title.mp3 during gameplay");
                 Check(!Source("pulse").isPlaying&&!Source("danger").isPlaying,"old music layers stopped");
-                Check(Mathf.Approximately(Source("bed").volume,.23f)&&Mathf.Approximately(Source("effects").volume,.31f),"Options volumes persist across scenes");
+                Check(Mathf.Approximately(Source("bed").volume,.23f*GameAudio.MusicMixGain)&&Mathf.Approximately(Source("effects").volume,.31f),"Options volumes persist across scenes");
                 GameManager.Instance.RecordScores=false;GameManager.Instance.SkipIntro();Next(.02f);break;
             case 4:
                 var g=GameManager.Instance;
-                if(!g.CountingDown){Check(g.State==GameState.Playing&&beats.SetEquals(new[]{"3","2","1","READY!"}),"four individual audible countdown beats");SceneManager.LoadScene("Title");Next();break;}
+                if(!g.CountingDown){Check(g.State==GameState.Playing&&beats.SetEquals(new[]{"3","2","1","READY!"}),"four individual audible countdown beats");CheckEnglishWarning(g);SceneManager.LoadScene("Title");Next();break;}
                 string label=GameObject.Find("3-2-1-READY!").GetComponent<TMP_Text>().text;
                 if(beats.Add(label)){Check(Source("effects").isPlaying,"beep plays for "+label);Check(g.State==GameState.Intro,"combat waits for beep "+label);}
                 break;
             case 5:Check(Source("bed").clip.name=="title"&&Source("bed").isPlaying,"title music on return");Check(errors.Length==0,"no audio/runtime errors");Finish("PASS: "+checks+" audio checks; looping Title/gameplay and Story/ending tracks, immediate Options BGM/SFX volume and mute, persistent settings, four separate countdown beeps, no overlapping old music. Original preferences and campaign restored.");break;
         }
         }catch(Exception e){if(running)Finish("FAIL: "+e);else{Debug.LogException(e);File.WriteAllText("Documentation/scene-music-checks.txt",e.ToString());}}
+    }
+    static void CheckEnglishWarning(GameManager game)
+    {
+        var battle=game.GetComponent<BattleExpansion>();battle.SpawnAssistant();int count=battle.AssistantCount;
+        var list=(System.Collections.IList)typeof(BattleExpansion).GetField("allies",System.Reflection.BindingFlags.Instance|System.Reflection.BindingFlags.NonPublic).GetValue(battle);
+        var ally=list[0];var position=((Transform)ally.GetType().GetField("root").GetValue(ally)).position;
+        for(int i=0;i<3;i++){ally.GetType().GetField("immune").SetValue(ally,0f);battle.HitAssistant(position,position);}
+        Check(battle.AssistantCount==count-1,"assistant loss triggered");
+        var notice=(TMP_Text)new SerializedObject(battle).FindProperty("lossNotice").objectReferenceValue;
+        Check(notice.text=="Warning!!!","assistant loss notice is English Warning!!!");
+        foreach(var text in UnityEngine.Object.FindObjectsByType<TMP_Text>(FindObjectsInactive.Include,FindObjectsSortMode.None))
+            Check(!System.Text.RegularExpressions.Regex.IsMatch(text.text??string.Empty,@"[\u0E00-\u0E7F]"),"English UI: "+text.name);
     }
 }

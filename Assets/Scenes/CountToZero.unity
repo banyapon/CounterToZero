@@ -26363,8 +26363,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 'ENTER THE CORE [ ENTER ]'
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 22966ed4b2accbc6dd46dc36d222d833, type: 2}
+  m_sharedMaterial: {fileID: 5192293977591498944, guid: 22966ed4b2accbc6dd46dc36d222d833, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -44601,6 +44601,7 @@ GameObject:
   - component: {fileID: 2124577409}
   - component: {fileID: 2124577410}
   - component: {fileID: 2124577412}
+  - component: {fileID: 2124577413}
   m_Layer: 0
   m_Name: Arena Camera
   m_TagString: MainCamera
@@ -44706,6 +44707,27 @@ MonoBehaviour:
   nearBossDistance: 4
   farBossDistance: 10
   closeZoomRatio: 0.85
+--- !u!114 &2124577413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2124577408}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c9f80e1bd40c95848b4966913b66f96a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CountToZero.SkylineParallaxBackdrop
+  sky: {fileID: 2800000, guid: e3aac92c51251d840b9980bd2b856d55, type: 3}
+  buildings:
+  - {fileID: 2800000, guid: 3bf96dc99139df84e8ad242d3591b8bf, type: 3}
+  - {fileID: 2800000, guid: 21a60b3ca11510e438f785251bf63801, type: 3}
+  - {fileID: 2800000, guid: f3fe5f29f8566d54ab5313638dacb2f9, type: 3}
+  - {fileID: 2800000, guid: ddd83c64d2a696e4d87d8ac3d5772fdd, type: 3}
+  backdropMaterial: {fileID: 2100000, guid: 2ec95874dd8a16e469b2009a3f7d3454, type: 2}
+  skyFraction: 0.1
+  cityRows: 12
 --- !u!1 &2128255291
 GameObject:
   m_ObjectHideFlags: 0
