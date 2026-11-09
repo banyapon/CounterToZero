@@ -15,6 +15,7 @@ namespace CountToZero
         [SerializeField] TMP_Text listeningLabel;
         [SerializeField] Slider musicVolume,sfxVolume;
         [SerializeField] Button title;
+        public Transform PanelTransform => panel.transform;
         void Awake()
         {
             if(musicVolume!=null){musicVolume.SetValueWithoutNotify(GameAudio.MusicVolume);musicVolume.onValueChanged.AddListener(GameAudio.SetMusic);}

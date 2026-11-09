@@ -1,0 +1,1 @@
+PASS 41 UI/audio checks across six scenes; paused hover, press, keyboard focus and click audio verified.

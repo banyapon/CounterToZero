@@ -11,10 +11,12 @@ namespace CountToZero
         [SerializeField,Range(0,1)] float followAmount=.28f;
         [SerializeField] float smoothTime=.2f, size=9.6f;
         [SerializeField] float minZoom=6, maxZoom=22, zoomSpeed=5, introDuration=6;
+        [SerializeField] float nearBossDistance=4, farBossDistance=10, closeZoomRatio=.85f;
+        float proximity=1, proximityVelocity;
         Vector3 velocity,focus; Camera view; float zoom=1,introTime; bool touring;
         public bool Touring=>touring;
         void Awake(){view=GetComponent<Camera>();view.orthographic=true;Snap();}
-        public void Snap(){touring=false;focus=target.position*followAmount;velocity=Vector3.zero;Apply();}
+        public void Snap(){touring=false;proximity=1;proximityVelocity=0;focus=target.position*followAmount;velocity=Vector3.zero;Apply();}
         public void StartIntro(){introTime=0;touring=true;}
         void LateUpdate()
         {
@@ -28,14 +30,26 @@ namespace CountToZero
                 if(t>=1){Snap();g.CompleteIntro();}return;
             }
             if(g.State==GameState.Playing){
-                focus=Vector3.SmoothDamp(focus,target.position*followAmount,ref velocity,smoothTime,Mathf.Infinity,Time.deltaTime);
+                float distance=Vector3.Distance(target.position,g.Boss.transform.position);
+                float near=1-Mathf.SmoothStep(0,1,Mathf.InverseLerp(nearBossDistance,farBossDistance,distance));
+                proximity=Mathf.SmoothDamp(proximity,Mathf.Lerp(1,closeZoomRatio,near),ref proximityVelocity,.5f);
+                Vector3 framing=Vector3.Lerp(target.position*followAmount,(target.position+g.Boss.transform.position)*.5f,near*.7f);
+                focus=Vector3.SmoothDamp(focus,framing,ref velocity,smoothTime,Mathf.Infinity,Time.deltaTime);
                 var k=Keyboard.current;float delta=0;
                 if(k!=null&&(k.leftCtrlKey.isPressed||k.rightCtrlKey.isPressed))delta=((k.upArrowKey.isPressed?1:0)-(k.downArrowKey.isPressed?1:0))*zoomSpeed*Time.unscaledDeltaTime;
                 if(Mouse.current!=null && !(EventSystem.current!=null&&EventSystem.current.IsPointerOverGameObject()))delta+=Mathf.Clamp(Mouse.current.scroll.ReadValue().y,-120,120)/120f;
                 zoom=Mathf.Clamp(zoom-delta/size,minZoom/size,maxZoom/size);
             }Apply();
         }
-        float DefaultSize()=>Mathf.Max(size,14f/view.aspect)*zoom;
-        void Apply(){focus.y=0;transform.position=focus+offset;transform.rotation=Quaternion.LookRotation(-offset,Vector3.up);if(GameManager.Instance!=null)transform.position+=GameManager.Instance.Feedback.ShakeOffset;view.orthographicSize=DefaultSize();}
+        float DefaultSize()=>Mathf.Clamp(Mathf.Max(size,14f/view.aspect)*zoom*proximity,minZoom,maxZoom);
+        void Apply(){
+            // Keep the complete arena inside the HUD-safe region, even at proximity zoom.
+            float verticalProjection=offset.y/offset.magnitude;
+            float fit=Mathf.Max(11.3f/(view.aspect*.92f),8.3f*verticalProjection/.78f);
+            float framedSize=Mathf.Max(DefaultSize(),fit);
+            focus.x=Mathf.Clamp(focus.x,-Mathf.Max(0,framedSize*view.aspect*.92f-11.3f),Mathf.Max(0,framedSize*view.aspect*.92f-11.3f));
+            float zRoom=Mathf.Max(0,framedSize*.78f/verticalProjection-8.3f);
+            focus.z=Mathf.Clamp(focus.z,-zRoom,zRoom);
+            focus.y=0;transform.position=focus+offset;transform.rotation=Quaternion.LookRotation(-offset,Vector3.up);if(GameManager.Instance!=null)transform.position+=GameManager.Instance.Feedback.ShakeOffset;view.orthographicSize=framedSize;}
     }
 }

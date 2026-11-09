@@ -1,0 +1,1 @@
+PASS: aim_pixel.png is the single point-filtered Lucky portrait; aspect ratio preserved and old animation frames replaced.

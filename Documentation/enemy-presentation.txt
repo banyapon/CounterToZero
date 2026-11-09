@@ -1,0 +1,1 @@
+Authored 6 enemies with 8walk column 1/2 animations and independent pooled pixel death rings.

@@ -64,18 +64,20 @@ namespace CountToZero
                 // A collision may clear the pool through a phase transition.
                 if(i>=active.Count) continue;
                 var b=active[i]; b.Age+=Time.deltaTime;
-                if(b.Homing) b.Velocity=Vector3.RotateTowards(b.Velocity,(g.Boss.transform.position-b.Position).normalized*16,Time.deltaTime*6,0);
+                if(b.Homing) b.Velocity=Vector3.RotateTowards(b.Velocity,((BattleExpansion.Instance!=null?BattleExpansion.Instance.BossAim:g.Boss.transform.position)-b.Position).normalized*16,Time.deltaTime*6,0);
                 Vector3 old=b.Position; b.Position+=b.Velocity*Time.deltaTime; b.Object.transform.position=b.Position;
                 if(b.Age>9 || Mathf.Abs(b.Position.x)>11.5f || Mathf.Abs(b.Position.z)>8.5f) {Release(i);continue;}
                 if(g.Encounters.Intercept(old,b.Position,b.Enemy,b.Homing?1.5f:1f)){Release(i);continue;}
                 if(b.Enemy)
                 {
+                    if(BattleExpansion.Instance!=null && BattleExpansion.Instance.HitAssistant(old,b.Position)){Release(i);continue;}
                     float distance=SegmentDistance(g.Player.transform.position,old,b.Position);
-                    if(distance<.29f) {Release(i);g.Player.Hurt();}
+                    if(distance<.18f) {Release(i);g.Player.Hurt();}
                     else if(distance<.85f && !b.Grazed) {b.Grazed=true;g.Score.Graze();}
                 }
                 else
                 {
+                    if(BattleExpansion.Instance!=null && BattleExpansion.Instance.HitSegment(old,b.Position,b.Homing?1.5f:1)){Release(i);continue;}
                     bool consumed=false;
                     for(int n=g.Orbs.Active.Count-1;n>=0;n--)
                     {

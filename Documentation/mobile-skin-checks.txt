@@ -1,0 +1,5 @@
+FAIL 0: System.InvalidOperationException: This cannot be used during play mode, please use SceneManager.LoadScene()/SceneManager.LoadSceneAsync() instead.
+  at (wrapper managed-to-native) UnityEditor.SceneManagement.EditorSceneManager.OpenScene_Injected(UnityEngine.Bindings.ManagedSpanWrapper&,UnityEditor.SceneManagement.OpenSceneMode,UnityEngine.SceneManagement.Scene&)
+  at UnityEditor.SceneManagement.EditorSceneManager.OpenScene (System.String scenePath, UnityEditor.SceneManagement.OpenSceneMode mode) [0x0002a] in <10f329ca493444f3928e8ce715a27e16>:0 
+  at UnityEditor.SceneManagement.EditorSceneManager.OpenScene (System.String scenePath) [0x00000] in <10f329ca493444f3928e8ce715a27e16>:0 
+  at MobileSkinChecks.Tick () [0x0005f] in D:\GitHub\Unity\CounterToZero\Assets\Editor\MobileSkinChecks.cs:20 

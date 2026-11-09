@@ -8,12 +8,29 @@ namespace CountToZero
         [SerializeField] GameObject warning;
         float age, life;
         bool falling;
+        Renderer blockRenderer;
+        MaterialPropertyBlock properties;
+        public static Color ElectricColor(float seconds)
+        {
+            int phase=Mathf.FloorToInt(seconds*6)%3;
+            return phase==0?ArenaVisuals.Violet:phase==1?Color.white:Color.black;
+        }
+        void Awake(){blockRenderer=cube.GetComponent<Renderer>();properties=new MaterialPropertyBlock();}
+        void ElectricFlash()
+        {
+            if(blockRenderer==null)return;
+            var color=ElectricColor(age);
+            blockRenderer.GetPropertyBlock(properties);properties.SetColor("_BaseColor",color);properties.SetColor("_Color",color);blockRenderer.SetPropertyBlock(properties);
+        }
         public bool Active {get;private set;}
         public bool Solid => Active && age>=1.5f;
         public Vector3 Position => transform.position;
         public void Summon(Vector3 position,bool drop)
         {
-            transform.position=position;falling=drop;age=0;life=drop?6:8;Active=true;gameObject.SetActive(true);
+            transform.position=position;falling=drop;age=0;life=drop?6:8;
+            var hazards=GameManager.Instance!=null?GameManager.Instance.Hazards:null;
+            if(hazards!=null && hazards.Scrolling)life=Mathf.Max(life,(position.z+10)/hazards.ScrollSpeed+1.5f);
+            Active=true;gameObject.SetActive(true);
             warning.SetActive(true);cube.gameObject.SetActive(drop);cube.localPosition=Vector3.up*(drop?9:.8f);
         }
         public void Clear(){Active=false;gameObject.SetActive(false);}
@@ -29,7 +46,18 @@ namespace CountToZero
         void Update()
         {
             var g=GameManager.Instance;if(!Active||g.State!=GameState.Playing)return;
-            float before=age;age+=Time.deltaTime;
+            float before=age;age+=Time.deltaTime;ElectricFlash();
+            if(g.Hazards!=null && g.Hazards.Scrolling && !g.Training)
+            {
+                transform.position+=Vector3.back*g.Hazards.ScrollSpeed*Time.deltaTime;
+                if(Solid && Blocks(g.Player.transform.position,.22f))
+                {
+                    var pushed=g.Player.transform.position;pushed.z=Position.z-1.1f;
+                    g.Player.transform.position=pushed;
+                    if(pushed.z<=-7.3f || g.View.WorldToViewportPoint(pushed).y<=.035f)g.Player.Crush();
+                }
+                if(Position.z < -9){Clear();return;}
+            }
             if(age<1.5f)
             {
                 warning.transform.localScale=Vector3.one*(1.9f+Mathf.Sin(age*15)*.1f);

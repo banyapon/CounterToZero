@@ -2,12 +2,14 @@ using UnityEngine;
 
 namespace CountToZero
 {
-    public enum BossShot { Ring, Fan, Spiral, Cross, Wave, AlternatingRing, TwinSpiral, AimedBurst, Flower, Pinwheel, Rain, SideSweep, Vortex, DoubleFan, Lanes, Pulse, Scissors, RotatingGate, Scatter, Finale }
-    public enum BossMotion { Sway, Orbit, Sweep, Pursue, FigureEight }
+    public enum BossShot { Ring, Fan, Spiral, Cross, Wave, AlternatingRing, TwinSpiral, AimedBurst, Flower, Pinwheel, Rain, SideSweep, Vortex, DoubleFan, Lanes, Pulse, Scissors, RotatingGate, Scatter, Finale, SquareRush, Serpent, Heartbeat, OrbitMines, Zigzag }
+    public enum BossMotion { Sway, Orbit, Sweep, Pursue, FigureEight, SquareRush, Serpent }
     [CreateAssetMenu(menuName="Count To Zero/Boss Pattern")]
     public sealed class BossPatternDefinition : ScriptableObject
     {
         public string displayName;
+        [Tooltip("Only damage triggered by matching a Lucky Rule can hurt this boss.")]
+        public bool luckyNumberOnly;
         public BossShot shot;
         public BossMotion motion;
         [Min(.1f)] public float interval=.8f;

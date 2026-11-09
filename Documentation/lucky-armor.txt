@@ -1,0 +1,1 @@
+PASS: Lucky-only armor on Broken Halo (6), Safe Lane (15), Rotating Gate (18), Orbit Mines (24). Dedicated Blocked audio wired across six scenes. Exact lucky matches: 19 damage; other lucky rules: 10 damage. Normal, charged and assistant shots cannot damage armored bosses.

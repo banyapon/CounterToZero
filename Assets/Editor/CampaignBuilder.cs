@@ -25,9 +25,9 @@ public static class CampaignBuilder
         var active=EditorSceneManager.GetActiveScene();if(active.isDirty)EditorSceneManager.SaveScene(active);
         var scene=EditorSceneManager.OpenScene("Assets/Scenes/CountToZero.unity");
         var camera=UnityEngine.Object.FindFirstObjectByType<FollowCamera>();var so=new SerializedObject(camera);so.FindProperty("offset").vector3Value=new Vector3(0,21,-18);so.ApplyModifiedPropertiesWithoutUndo();camera.transform.position=new Vector3(0,21,-18);camera.transform.LookAt(Vector3.zero);
-        string[] names={"RADIAL SWAY","HUNTER FAN","ORBIT SPIRAL","CROSS SWEEP","SINE WAVE","BROKEN HALO","TWIN HELIX","NEEDLE BURST","PETAL ENGINE","PINWHEEL","CODE RAIN","SIDEWINDER","VORTEX","TWIN FANG","SAFE LANE","DOUBLE PULSE","SCISSORS","ROTATING GATE","GOLDEN SCATTER","FINAL EQUATION"};
-        var boss=UnityEngine.Object.FindFirstObjectByType<BossController>();so=new SerializedObject(boss);var array=so.FindProperty("patterns");array.arraySize=20;
-        for(int i=0;i<20;i++){
+        string[] names={"RADIAL SWAY","HUNTER FAN","ORBIT SPIRAL","CROSS SWEEP","SINE WAVE","BROKEN HALO","TWIN HELIX","NEEDLE BURST","PETAL ENGINE","PINWHEEL","CODE RAIN","SIDEWINDER","VORTEX","TWIN FANG","SAFE LANE","DOUBLE PULSE","SCISSORS","ROTATING GATE","GOLDEN SCATTER","FINAL EQUATION","SQUARE RUSH","SEGMENTED VIRUS","HEARTBEAT","ORBIT MINES","ZIGZAG"};
+        var boss=UnityEngine.Object.FindFirstObjectByType<BossController>();so=new SerializedObject(boss);var array=so.FindProperty("patterns");array.arraySize=25;
+        for(int i=0;i<25;i++){
             string path="Assets/GameAssets/Patterns/"+i+"_"+names[i].Replace(' ','_')+".asset";var pattern=AssetDatabase.LoadAssetAtPath<BossPatternDefinition>(path);
             if(pattern==null){pattern=ScriptableObject.CreateInstance<BossPatternDefinition>();pattern.displayName=names[i];pattern.shot=(BossShot)i;pattern.motion=(BossMotion)(i%5);pattern.interval=i==6?.45f:i==10?1.3f:.9f;pattern.speed=3.2f+(i%4)*.2f;pattern.count=12;AssetDatabase.CreateAsset(pattern,path);}array.GetArrayElementAtIndex(i).objectReferenceValue=pattern;
         }so.ApplyModifiedPropertiesWithoutUndo();EditorSceneManager.MarkSceneDirty(scene);EditorSceneManager.SaveScene(scene);
@@ -47,6 +47,6 @@ public static class CampaignBuilder
             EditorSceneManager.SaveScene(pageScene,path);
         }
         string[] ordered={"Title","Preload","Story","CountToZero","TurnEnd","StoryEnd"};var settings=new EditorBuildSettingsScene[ordered.Length];for(int i=0;i<ordered.Length;i++)settings[i]=new EditorBuildSettingsScene("Assets/Scenes/"+ordered[i]+".unity",true);EditorBuildSettings.scenes=settings;AssetDatabase.SaveAssets();
-        EditorSceneManager.OpenScene("Assets/Scenes/Title.unity");File.WriteAllText("Temp/ctz-campaign-build.done","Campaign scenes authored. 20 patterns. Title first in build settings.");Debug.Log("COUNT TO ZERO: campaign scenes ready.");
+        EditorSceneManager.OpenScene("Assets/Scenes/Title.unity");File.WriteAllText("Temp/ctz-campaign-build.done","Campaign scenes authored. 25 patterns. Title first in build settings.");Debug.Log("COUNT TO ZERO: campaign scenes ready.");
     }
 }

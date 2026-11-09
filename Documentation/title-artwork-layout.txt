@@ -1,0 +1,7 @@
+Title artwork layout (2026-11-09)
+- Authored Home area: 1200 units, Character Artwork 960 (80%), Main Actions 240 (20%).
+- title.png imported as a single, point-filtered, uncompressed sprite; original pixels preserved.
+- Reserved one-line heading above artwork and stacked New Game / Continue / Options / Credits.
+- Keyboard: arrows + Enter for menus; Escape goes back; credits scroll with Up/Down.
+- Gameplay: WASD/arrows move, J auto-aim fire, Space slide, E focus, Escape pause.
+- Camera proximity zoom retained, constrained by arena bounds and HUD margins.

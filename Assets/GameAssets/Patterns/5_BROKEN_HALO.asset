@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: 5_BROKEN_HALO
   m_EditorClassIdentifier: Assembly-CSharp::CountToZero.BossPatternDefinition
   displayName: BROKEN HALO
+  luckyNumberOnly: 1
   shot: 5
   motion: 1
   interval: 0.95

@@ -1,0 +1,7 @@
+Updated 57 body labels and 30 buttons across six scenes; 4 new sound mappings; audio listeners on menu cameras.
+Preload / Story and Results : size=72 rect=(1040.00, 280.00) preferred=(586.42, 62.41)
+Story / Story and Results : size=72 rect=(1040.00, 280.00) preferred=(886.05, 130.87)
+CountToZero / Line : size=30 rect=(600.00, 94.00) preferred=(0.00, 0.00)
+CountToZero / Instruction : size=27 rect=(500.00, 90.00) preferred=(242.06, 23.41)
+TurnEnd / Story and Results : size=72 rect=(1040.00, 280.00) preferred=(566.14, 62.41)
+StoryEnd / Story and Results : size=72 rect=(1040.00, 280.00) preferred=(771.16, 130.87)

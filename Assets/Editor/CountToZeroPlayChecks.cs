@@ -57,7 +57,7 @@ public static class CountToZeroPlayChecks
                 hp=g.Boss.Health;g.DamageBoss(1);Check(g.Boss.Health==hp,"shield reflects ordinary shots");
                 g.Begin();g.DamageBoss(33,true);Check(g.Phase==2,"phase two");
                 g.Boss.CrashUntil=0;g.DamageBoss(33,true);Check(g.Phase==3,"phase three");
-                g.Boss.CrashUntil=0;g.DamageBoss(33,true);Check(g.State==GameState.Won,"victory");
+                g.Boss.CrashUntil=0;g.DamageBoss(33,true);Check(g.State==GameState.Victory,"victory presentation begins before results");
                 g.Begin();for(int i=0;i<5;i++)g.Player.Hurt(true);Check(g.State==GameState.Lost,"defeat");
                 g.Begin();g.Score.Focus=1;g.Focus();Check(g.Score.Focus==0 && g.SlowUntil>Time.unscaledTime,"bullet time");
                 g.TogglePause();Check(g.State==GameState.Paused,"pause");g.TogglePause();
