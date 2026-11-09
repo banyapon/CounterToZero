@@ -3086,6 +3086,9 @@ MonoBehaviour:
   - cue: 14
     clip: {fileID: 8300000, guid: 6f860c0e09702ce458750859e41118c0, type: 3}
     volume: 0.75
+  - cue: 15
+    clip: {fileID: 8300000, guid: dba9a164d8e6a8942b911e7fb8c61d85, type: 3}
+    volume: 0.9
   titleMusic: {fileID: 8300000, guid: d81058948862f7b43b8c3695c6640f02, type: 3}
   storyMusic: {fileID: 8300000, guid: 8cc9386995cb5c641847ec7d65fe55f1, type: 3}
 --- !u!4 &2109547417

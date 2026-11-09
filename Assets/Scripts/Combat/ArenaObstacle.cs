@@ -6,6 +6,9 @@ namespace CountToZero
     {
         [SerializeField] Transform cube;
         [SerializeField] GameObject warning;
+        [SerializeField] SpriteRenderer fire;      // second variant: falling pixel fireball
+        [SerializeField] Sprite[] fireFrames;
+        public bool Fire {get;private set;}
         float age, life;
         bool falling;
         Renderer blockRenderer;
@@ -18,6 +21,7 @@ namespace CountToZero
         void Awake(){blockRenderer=cube.GetComponent<Renderer>();properties=new MaterialPropertyBlock();}
         void ElectricFlash()
         {
+            if(Fire){AnimateFire();return;}
             if(blockRenderer==null)return;
             var color=ElectricColor(age);
             blockRenderer.GetPropertyBlock(properties);properties.SetColor("_BaseColor",color);properties.SetColor("_Color",color);blockRenderer.SetPropertyBlock(properties);
@@ -30,10 +34,21 @@ namespace CountToZero
             transform.position=position;falling=drop;age=0;life=drop?6:8;
             var hazards=GameManager.Instance!=null?GameManager.Instance.Hazards:null;
             if(hazards!=null && hazards.Scrolling)life=Mathf.Max(life,(position.z+10)/hazards.ScrollSpeed+1.5f);
+            Fire=CanBurn&&Random.value<.5f;
             Active=true;gameObject.SetActive(true);
-            warning.SetActive(true);cube.gameObject.SetActive(drop);cube.localPosition=Vector3.up*(drop?9:.8f);
+            warning.SetActive(true);cube.localPosition=Vector3.up*(drop?9:.8f);ShowBody(drop);if(Fire)AnimateFire();
         }
         public void Clear(){Active=false;gameObject.SetActive(false);}
+        bool CanBurn=>fire!=null&&fireFrames!=null&&fireFrames.Length>0;
+        // The body (cube or fireball) shares the cube's drop height so both variants fall the same way.
+        void ShowBody(bool visible){cube.gameObject.SetActive(visible&&!Fire);if(fire!=null){fire.gameObject.SetActive(visible&&Fire);fire.transform.localPosition=cube.localPosition+Vector3.up*.2f;}}
+        void AnimateFire()
+        {
+            var g=GameManager.Instance;
+            fire.transform.localPosition=cube.localPosition+Vector3.up*.2f;
+            if(g!=null&&g.View!=null)fire.transform.rotation=g.View.transform.rotation;
+            fire.sprite=fireFrames[Mathf.FloorToInt(age*10)%fireFrames.Length];
+        }
         public bool Blocks(Vector3 point,float radius=.32f)
         {return Solid && Mathf.Abs(point.x-Position.x)<.8f+radius && Mathf.Abs(point.z-Position.z)<.8f+radius;}
         public bool HitsSegment(Vector3 a,Vector3 b)
@@ -65,10 +80,10 @@ namespace CountToZero
             }
             else
             {
-                warning.SetActive(false);cube.gameObject.SetActive(true);cube.localPosition=Vector3.up*.8f;
+                warning.SetActive(false);cube.localPosition=Vector3.up*.8f;ShowBody(true);
                 if(before<1.5f && Blocks(g.Player.transform.position))
                 {
-                    if(falling)g.Player.Hurt(false,"Falling cube");
+                    if(falling)g.Player.Hurt(false,Fire?"Falling fireball":"Falling cube");
                     // Always leave the player outside a newly solid block, even while stunned.
                     Vector3 away=g.Player.transform.position-Position;if(away.sqrMagnitude<.01f)away=Vector3.back;
                     away=away.normalized*1.65f;var safe=Position+away;

@@ -1,0 +1,20 @@
+DONE state=Playing bossHP=80 playerHP=5
+== intro screen 1579x888 boss (713.17, 383.65) player (858.89, 498.86)
+shot itch-1-intro
+step Move
+shot itch-2-move
+step Lucky orbs 1 value 1
+== count screen 1579x888 boss (769.71, 637.50) player (836.05, 335.27)
+shot itch-3-count
+step Lucky orbs 1 value 3
+shot itch-4-count2
+step Celebrate value 1
+shot itch-5-lucky7
+== live+dialogue screen 1579x888 boss (936.88, 663.21) player (789.08, 342.34)
+shot itch-6-live
+rule EXACTLY 7
+shot itch-7-exact
+after exact rule EXACTLY 6
+== later screen 1579x888 boss (852.36, 598.98) player (778.25, 330.85)
+shot itch-8-later
+rule EXACTLY 6 minions 0 blocks 0

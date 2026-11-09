@@ -1,0 +1,6 @@
+PASS: ranks page rebuilt as a 10-row table. Buttons in the scene: 14.
+Leaderboard config: Assets/GameAssets/Cloud/count_to_zero_best.lb
+The cloud returned LeaderboardNotFound until this board is deployed.
+Deploy: running
+Deploy result: Success Deployed
+Deploy result: Success Deployed

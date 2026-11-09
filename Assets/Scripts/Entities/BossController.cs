@@ -13,6 +13,7 @@ namespace CountToZero
         int patternIndex;
         public string PatternName => patterns[patternIndex].displayName;
         public int PatternIndex => patternIndex;
+        public bool ArmoredPattern => patterns[patternIndex].luckyNumberOnly;
         public bool LuckyNumberOnly => !Game.Training && patterns[patternIndex].luckyNumberOnly;
         public void RejectShot()
         {
@@ -31,6 +32,7 @@ namespace CountToZero
         {
             blockedUntil=blockedHintUntil=blockedFlashUntil=0;Health = 99; ShieldUntil = CrashUntil = fireAt = angle = 0;
             SetValue(50); transform.position = spawnPoint.position; patternIndex=0;patternUntil=7;
+            GetComponent<BossForm>()?.ResetRun();
         }
         Vector3 SquarePosition(float t){if(t%8>=5)return new Vector3(0,0,4);float phase=(t%5)/5*4;Vector3[] corners={new Vector3(-8,0,-5),new Vector3(-8,0,5),new Vector3(8,0,5),new Vector3(8,0,-5)};int n=Mathf.FloorToInt(phase);return Vector3.Lerp(corners[n%4],corners[(n+1)%4],phase-n);}
         void Shot(float degrees,float speed){Game.Bullets.Fire(transform.position,Quaternion.Euler(0,degrees,0)*Vector3.forward,true,speed);}
@@ -56,7 +58,7 @@ namespace CountToZero
             transform.position=Vector3.MoveTowards(transform.position,destination,Time.deltaTime*(pattern.motion==BossMotion.SquareRush?(t%8<5?24:1.2f):3));
             sprite.transform.localPosition=visualOrigin+Vector3.up*(Mathf.Sin(t*2)*.12f);
             if(Time.time<fireAt)return;
-            fireAt=Time.time+pattern.interval/((1+(Game.Phase-1)*.17f)*(Campaign.Active?Campaign.Data.difficulty:1));
+            fireAt=Time.time+pattern.interval/((1+(Game.Phase-1)*.17f)*(Campaign.Active?Campaign.Data.difficulty:1)*Unlocks.BossFireScale);
             float speed=pattern.speed*(ShieldUntil>Time.time?1.5f:1)*(Campaign.Active?Mathf.Sqrt(Campaign.Data.difficulty):1);
             angle+=23;
             Vector3 aim=(Game.Player.transform.position-transform.position).normalized;

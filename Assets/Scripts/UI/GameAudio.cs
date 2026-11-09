@@ -3,7 +3,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 namespace CountToZero
 {
-    public enum SoundCue { Pickup, Heal, Shoot, Dash, Lucky, Hit, Warning, Death, Phase, UIHover, UIClick, Explosion, Blocked, Countdown, Ready }
+    public enum SoundCue { Pickup, Heal, Shoot, Dash, Lucky, Hit, Warning, Death, Phase, UIHover, UIClick, Explosion, Blocked, Countdown, Ready, Jackpot }
     [Serializable] public class CueClip {public SoundCue cue;public AudioClip clip;[Range(0,1)]public float volume=.7f;}
     public sealed class GameAudio : MonoBehaviour
     {
