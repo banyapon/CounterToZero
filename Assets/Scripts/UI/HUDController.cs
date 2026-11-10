@@ -101,6 +101,8 @@ namespace CountToZero
             overlayBody.text = title ? "Outcalculate OMEGA-99. Survive the bullet storm.\n\n01   Collect orbs to match the golden Lucky Rule.\n\n02   Shoot +/- orbs to flip them. Deny the boss its orbs.\n\n03   Dash flips your sign. Zero stuns. +/-100 explodes.\n\nExact match = laser. Other matches = homing fire for 5s."
                 : paused ? "Controls can be changed in OPTIONS.\n\nGamepad: left stick move / right stick aim / RT fire\nA: dash / X: bullet time / Start: pause\n\nTouch: joystick + FIRE / DASH / FOCUS buttons."
                 : (g.State==GameState.Lost?"LAST HIT: "+g.Player.LastDamageCause+"\nRetry starts immediately.\n\n":"")+"SCORE  " + g.Score.Score.ToString("N0") + "     RANK  " + g.Score.Grade + "\n\nTIME  " + g.Elapsed.ToString("0.0") + "s    PHASE  " + g.Phase + " OF 3\n\nPERSONAL BEST  " + PlayerPrefs.GetInt(GameManager.BestScoreKey, 0).ToString("N0") + (CloudRanks.PlayerRank > 0 ? "\nCLOUD RANK  #" + CloudRanks.PlayerRank.ToString("00") : "");
+            if(g.State==GameState.Lost)
+                overlayBody.text="<color=#FFB9BD>LAST HIT</color>  "+g.Player.LastDamageCause+"\n\n<color=#FFE6A6>NEXT TRY</color>\n"+DefeatAdvice.For(g.Player.LastDamageCause)+"\n\nSCORE  "+g.Score.Score.ToString("N0")+"   RANK  "+g.Score.Grade+"   TIME  "+g.Elapsed.ToString("0.0")+"s"+(CloudRanks.PlayerRank>0?"\nCLOUD RANK  #"+CloudRanks.PlayerRank.ToString("00"):"");
             actionLabel.text = title ? "ENTER THE CORE  [ ENTER ]" : paused ? "RESUME  [ ESC ]" : "REBOOT RUN  [ ENTER / R ]";
         }
     }

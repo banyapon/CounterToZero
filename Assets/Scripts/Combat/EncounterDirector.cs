@@ -38,9 +38,9 @@ namespace CountToZero
         public bool Blocked(Vector3 point){foreach(var item in obstacles)if(item.Blocks(point))return true;return false;}
         public Vector3 AutoAim(Vector3 origin)
         {
-            Vector3 target=BattleExpansion.Instance!=null?BattleExpansion.Instance.BossAim:GameManager.Instance.Boss.transform.position;float nearest=6;
+            Vector3 target=BattleExpansion.Instance!=null?BattleExpansion.Instance.NearestBossAim(origin):GameManager.Instance.Boss.transform.position;target.y=origin.y;float nearest=(target-origin).sqrMagnitude;
             foreach(var minion in minions)if(minion.Active)
-            {float distance=Vector3.Distance(origin,minion.transform.position);if(distance<nearest){nearest=distance;target=minion.transform.position;}}
+            {var point=minion.transform.position;point.y=origin.y;float distance=(point-origin).sqrMagnitude;if(distance<nearest){nearest=distance;target=point;}}
             return target;
         }
         public Vector3 Move(Vector3 from,Vector3 delta)

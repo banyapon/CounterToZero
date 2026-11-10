@@ -1,0 +1,20 @@
+[
+  {
+    "file": "CountToZero-PC.zip",
+    "bytes": 46585247,
+    "MB": 46.59,
+    "files": 217,
+    "CRC": "PASS",
+    "required_files": "PASS",
+    "sha256": "900d562e88afdef83cf93c116a351a686bd0fae8d3ea58a6835b573e92813896"
+  },
+  {
+    "file": "itch.zip",
+    "bytes": 23059978,
+    "MB": 23.06,
+    "files": 19,
+    "CRC": "PASS",
+    "required_files": "PASS",
+    "sha256": "f4ef207b7eb13a73414ba0551549ddd3bf1776e46adf8e0e78016dfd97fe2a0c"
+  }
+]

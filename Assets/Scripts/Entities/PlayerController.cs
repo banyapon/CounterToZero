@@ -59,8 +59,7 @@ namespace CountToZero
             if (Time.time < shotReady) return;
             ShotsFired++;GameAudio.Play(SoundCue.Shoot);
             bool charged = Time.time < OverchargeUntil; shotReady = Time.time + (charged ? .095f : .18f);
-            Vector3 aim = BattleExpansion.Instance!=null?BattleExpansion.Instance.BossAim:Game.Boss.transform.position;
-            if(Game.Controls.TouchVisible)aim=Game.Encounters.AutoAim(transform.position);
+            Vector3 aim = Game.Encounters.AutoAim(transform.position);
             if (Game.Controls.StickAim.sqrMagnitude > .01f) aim=transform.position+Game.Controls.WorldDirection(Game.Controls.StickAim)*15;
             else if (Game.Controls.MouseAiming && Mouse.current != null)
             {

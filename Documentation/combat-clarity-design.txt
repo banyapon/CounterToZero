@@ -1,0 +1,4 @@
+Combat clarity changes (2026-11-10)
+Automatic shots compare horizontal distance to the boss's vulnerable segments (or core) and all active minions. No six-unit cutoff. Keyboard and mobile share this selection. Mouse and right-stick aiming remain manual; charged homing shots retarget nearest enemies.
+Lucky uses the supplied aim_pixel artwork at 100x110, down from 200x220. Its lower-left background is now fixed at 320x126 with reduced opacity.
+Defeat panel: LAST HIT shows the actual final damage source; NEXT TRY gives two relevant avoidance instructions. Score/rank/time remain beneath it. Advice covers all 16 current damage causes, with a fallback for future hazards. Retry and menu navigation retain current behavior.

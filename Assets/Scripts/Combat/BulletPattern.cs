@@ -64,7 +64,7 @@ namespace CountToZero
                 // A collision may clear the pool through a phase transition.
                 if(i>=active.Count) continue;
                 var b=active[i]; b.Age+=Time.deltaTime;
-                if(b.Homing) b.Velocity=Vector3.RotateTowards(b.Velocity,((BattleExpansion.Instance!=null?BattleExpansion.Instance.BossAim:g.Boss.transform.position)-b.Position).normalized*16,Time.deltaTime*6,0);
+                if(b.Homing) b.Velocity=Vector3.RotateTowards(b.Velocity,(g.Encounters.AutoAim(b.Position)-b.Position).normalized*16,Time.deltaTime*6,0);
                 Vector3 old=b.Position; b.Position+=b.Velocity*Time.deltaTime; b.Object.transform.position=b.Position;
                 if(b.Age>9 || Mathf.Abs(b.Position.x)>11.5f || Mathf.Abs(b.Position.z)>8.5f) {Release(i);continue;}
                 if(g.Encounters.Intercept(old,b.Position,b.Enemy,b.Homing?1.5f:1f)){Release(i);continue;}

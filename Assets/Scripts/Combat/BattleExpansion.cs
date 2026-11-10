@@ -19,6 +19,13 @@ namespace CountToZero
   public int AssistantCount=>allies.Count;
   public int SegmentsAlive=>segments.Count;
   public Vector3 BossAim {get{var p=segments.Count>0?segments[segments.Count-1].transform.position:G.Boss.transform.position;p.y=0;return p;}}
+  public Vector3 NearestBossAim(Vector3 origin){
+   var best=G.Boss.transform.position;best.y=origin.y;
+   if(segments.Count==0)return best;
+   float distance=float.PositiveInfinity;
+   foreach(var segment in segments){var p=segment.transform.position;p.y=origin.y;float d=(p-origin).sqrMagnitude;if(d<distance){distance=d;best=p;}}
+   return best;
+  }
   GameManager G=>GameManager.Instance;
   void Awake(){Instance=this;bolt=Line("Tracking lightning",.12f);boltGlow=Line("Lightning blue outline",.3f);boltGlow.sortingOrder=-1;ring=Line("Lightning warning",.06f);bolt.enabled=boltGlow.enabled=ring.enabled=false;}
   void OnDestroy(){if(Instance==this)Instance=null;}
