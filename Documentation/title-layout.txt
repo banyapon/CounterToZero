@@ -1,1 +1,0 @@
-PASS: title menu authored in Title.unity. Home, Difficulty, Options and Credits pages; all 11 buttons and both audio sliders exist in the edit-time Hierarchy. Original scene backed up to Backup/TitleLayout.

@@ -1,1 +1,0 @@
-PASS: bottom bar reduced from 126 to 74 units (41% less height), controls reorganized at readable font sizes.

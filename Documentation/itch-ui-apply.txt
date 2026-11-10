@@ -1,7 +1,0 @@
-APPLIED itch HUD layout: dialogue + training strip, rule headline, boss value tag, player HP scale
-jackpot cue -> Assets/Scenes/Title.unity clip=True
-jackpot cue -> Assets/Scenes/Preload.unity clip=True
-jackpot cue -> Assets/Scenes/Story.unity clip=True
-jackpot cue -> Assets/Scenes/StoryEnd.unity clip=True
-jackpot cue -> Assets/Scenes/TurnEnd.unity clip=True
-jackpot cue -> Assets/Scenes/CountToZero.unity clip=True

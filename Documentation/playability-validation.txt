@@ -1,3 +1,0 @@
-FAIL: System.Exception: synchronized loop length
-  at PlayabilityChecks.Check (System.Boolean pass, System.String name) [0x00016] in D:\GitHub\Unity\CounterToZero\Assets\Editor\PlayabilityChecks.cs:20 
-  at PlayabilityChecks.Run () [0x001ad] in D:\GitHub\Unity\CounterToZero\Assets\Editor\PlayabilityChecks.cs:26 

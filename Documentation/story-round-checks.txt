@@ -1,1 +1,0 @@
-PASS: 598 checks; three story images, fourth ending/choice image, repeat tours, complete countdown with combat gated, retry and both assistants facing front before victory panel. Original campaign save restored.

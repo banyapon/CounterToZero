@@ -1,1 +1,0 @@
-PASS: 231 checks; 12 dense city billboard rows, top 10% sky, camera orbit, live parallax, zoom coverage, pause and retry, no accumulating objects or shader errors. Original campaign restored.

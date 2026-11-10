@@ -1,1 +1,0 @@
-PASS: 277 checks. All six scenes use bold TMP, correct title/body font assets, no legacy text, serialized references intact, nine authored HP bars, orb prefab, player damage/heal, boss damage and minion damage/death.

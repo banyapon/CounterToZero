@@ -1,1 +1,0 @@
-PASS 33 checks: authored title layout, pages/audio/credits, keyboard Enter starts menu, movement, auto-aim fire, dash, focus, pause/resume and camera arena framing. Campaign and audio preferences restored.

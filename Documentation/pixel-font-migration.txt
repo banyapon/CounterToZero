@@ -1,2 +1,0 @@
-PASS: replaced 144 text components; size ratio=0.3936508; no Iannnnn/Body SDF scene dependencies.
-PASS: replaced 17 text components from Assets/Fonts/Title SDF.asset; size ratio=1.142857; no retired font scene dependencies.

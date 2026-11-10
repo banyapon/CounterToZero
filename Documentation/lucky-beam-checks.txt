@@ -1,1 +1,0 @@
-PASS: 15 checks; Pixel countdown, Lucky beam visible after cut-in, 25 jittering points, hero/boss endpoints, glow, clean expiry/reset, exact and non-exact Lucky matches. Original campaign restored.

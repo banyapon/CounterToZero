@@ -1,5 +1,0 @@
-CountToZero-PC.zip: PASS, 217 entries, 46583761 bytes, SHA256 74cdf6a74e6c569f646324475789ca3cabdadb1f410e8ba732c38333c557d10c
-itch.zip: PASS, 19 entries, 23063655 bytes, SHA256 f8300689610c96cd219e01f92cfa65268afb2ac25a838d06e2593af9837665e1
-UnityPlay.zip: PASS, 19 entries, 23063655 bytes, SHA256 f8300689610c96cd219e01f92cfa65268afb2ac25a838d06e2593af9837665e1
-GIF: PASS, 960x540, 120 decodable frames, 12000ms, 13385065 bytes
-Play mode: PASS Pause -> Options -> Back -> Resume; no overlaps; focus restored; no runtime errors.

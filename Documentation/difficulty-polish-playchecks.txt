@@ -1,1 +1,0 @@
-PASS / 17 checks: half-size actors, level-scaled random block waves, electric colors, actual early/late minion firing, sharp punch cut-in, untinted overcharged victory and result transition.

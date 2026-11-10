@@ -1,2 +1,0 @@
-PASS: 45384 assertions.
-All rule types, targets 0..10, values -99..99, fairness, signed arithmetic and score checked.

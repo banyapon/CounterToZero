@@ -1,1 +1,0 @@
-PASS / 84 presentation checks. Far/near/far zoom, theme, HP, impact, animation and delayed campaign transition.

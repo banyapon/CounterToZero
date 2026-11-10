@@ -1,1 +1,0 @@
-PASS / 18 checks: deterministic sector variety, 3 robot variants, telegraph, real laser crossing/50% damage/knockback, immunity, pause, downward floor and blocks, bottom crush and retry.

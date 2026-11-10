@@ -1,1 +1,0 @@
-PASS 22 lucky armor checks: chosen patterns, ordinary/charged shots, rejection cue and cooldown, crash/overflow protection, all seven lucky rule types, normal-boss regressions and HUD instruction. Campaign save restored.

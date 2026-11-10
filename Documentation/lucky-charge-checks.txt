@@ -1,1 +1,0 @@
-PASS 8 checks: supplied aim_pixel portrait, no old animation frames, point filtering, readable caption and clean dismissal. Campaign save restored.

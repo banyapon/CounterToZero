@@ -1,1 +1,0 @@
-Applied 50% actor size (1.7 -> 0.85), point-filtered four-frame Lucky punch at the original lower-left position.
