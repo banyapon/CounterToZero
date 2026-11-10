@@ -1,0 +1,143 @@
+PASS: Pause -> Options -> Back -> Resume; recorded 120 gameplay frames at nominal 10 fps.
+PASS: gameplay started
+Restore Defaults (x:190.10, y:128.76, width:222.00, height:53.28) inOptions=True
+Bind Left (x:423.20, y:451.77, width:355.20, height:53.28) inOptions=True
+Bind Right (x:423.20, y:385.17, width:355.20, height:53.28) inOptions=True
+Bind Fire (x:811.70, y:584.97, width:355.20, height:53.28) inOptions=True
+Music Volume (x:600.80, y:69.93, width:188.70, height:31.08) inOptions=True
+Cancel Listening (x:434.30, y:128.76, width:222.00, height:53.28) inOptions=True
+Bind Focus (x:811.70, y:451.77, width:355.20, height:53.28) inOptions=True
+Bind Dash (x:811.70, y:518.37, width:355.20, height:53.28) inOptions=True
+Bind Down (x:423.20, y:518.37, width:355.20, height:53.28) inOptions=True
+CREDITS (x:678.50, y:128.76, width:222.00, height:53.28) inOptions=True
+Bind Pause (x:811.70, y:385.17, width:355.20, height:53.28) inOptions=True
+Bind Up (x:423.20, y:582.57, width:371.18, height:55.68) inOptions=True
+SFX Volume (x:956.00, y:69.93, width:216.45, height:31.08) inOptions=True
+Title (x:922.70, y:128.76, width:222.00, height:53.28) inOptions=True
+Close Options (x:1166.90, y:128.76, width:222.00, height:53.28) inOptions=True
+PASS: options modal opened
+PASS: underlying Options button hidden
+PASS: focus inside options modal
+PASS: Back restores Pause
+PASS: Options button restored
+PASS: focus restored to Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options
+PASS: resume gameplay after Options

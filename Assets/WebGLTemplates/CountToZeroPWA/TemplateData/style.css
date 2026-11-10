@@ -1,0 +1,16 @@
+body { padding: 0; margin: 0 }
+#unity-container { position: fixed; width: 100%; height: 100%; }
+#unity-fullscreen-container { position: relative; width: 100%; height: 100%; }
+#unity-canvas { position: absolute; width: 100%; height: 100%; background: {{{ BACKGROUND_COLOR }}} }
+#unity-loading-container { position: absolute; width: 100%; height: 100%; backdrop-filter: blur(5px); display: none; }
+#unity-loading-bar { position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+#unity-logo { width: 154px; height: 130px; background: url('unity-logo-{{{ SPLASH_SCREEN_STYLE.toLowerCase() }}}.png') no-repeat center }
+#unity-progress-bar-empty { margin-left: auto; margin-right: auto; width: 141px; height: 18px; margin-top: 10px; background: url('progress-bar-empty-{{{ SPLASH_SCREEN_STYLE.toLowerCase() }}}.png') no-repeat center }
+#unity-progress-bar-full { width: 0%; height: 18px; margin-top: 10px; background: url('progress-bar-full-{{{ SPLASH_SCREEN_STYLE.toLowerCase() }}}.png') no-repeat center }
+#unity-warning { position: absolute; left: 50%; top: 5%; transform: translate(-50%); background: white; padding: 10px; display: none }
+
+html, body { width:100%; height:100%; overflow:hidden; background:#07101b; }
+#unity-container { inset:0; height:100dvh; }
+#unity-canvas { display:block; outline:none; }
+#fullscreen-button { position:absolute; right:max(12px,env(safe-area-inset-right)); top:max(12px,env(safe-area-inset-top)); z-index:10; border:1px solid #64edff; border-radius:3px; background:#081725cc; color:#d9faff; padding:8px 12px; font:12px monospace; cursor:pointer; }
+#fullscreen-button[hidden] { display:none; }

@@ -22,7 +22,7 @@ public static class PlayabilityChecks
     public static void Run(){
         SessionState.SetBool("CTZ.PlayHadSave",PlayerPrefs.HasKey(KeyName));SessionState.SetString("CTZ.PlaySave",PlayerPrefs.GetString(KeyName,""));SessionState.SetFloat("CTZ.PlayMusic",GameAudio.MusicVolume);SessionState.SetFloat("CTZ.PlaySFX",GameAudio.EffectsVolume);
         try{checks=0;foreach(string name in new[]{"Title","Preload","Story","CountToZero","TurnEnd","StoryEnd"}){
-            EditorSceneManager.OpenScene("Assets/Scenes/"+name+".unity");var audio=UnityEngine.Object.FindAnyObjectByType<GameAudio>();Check(audio!=null,name+" authored audio");var so=new SerializedObject(audio);var cues=so.FindProperty("cues");Check(cues.arraySize==9,"nine cues");for(int i=0;i<9;i++)Check(cues.GetArrayElementAtIndex(i).FindPropertyRelative("clip").objectReferenceValue!=null,"cue clip "+i);
+            EditorSceneManager.OpenScene("Assets/Scenes/"+name+".unity");var audio=UnityEngine.Object.FindAnyObjectByType<GameAudio>();Check(audio!=null,name+" authored audio");var so=new SerializedObject(audio);var cues=so.FindProperty("cues");Check(cues.arraySize>=10,"nine base cues + jackpot");for(int i=0;i<9;i++)Check(cues.GetArrayElementAtIndex(i).FindPropertyRelative("clip").objectReferenceValue!=null,"cue clip "+i);
             int samples=0;foreach(string stem in new[]{"bed","pulse","danger"}){var source=(AudioSource)so.FindProperty(stem).objectReferenceValue;Check(source.loop&&source.clip!=null,"looping stem");if(samples==0)samples=source.clip.samples;Check(samples==source.clip.samples,"synchronized loop length");}
         }
         Check(Mathf.Abs(Campaign.Adapt(1,400,0,0)-1)<=.1201f,"adaptive upward step bounded");Check(Mathf.Abs(Campaign.Adapt(1,2400,150,20)-1)<=.1201f,"adaptive downward step bounded");
@@ -38,11 +38,13 @@ public static class PlayabilityChecks
                 Campaign.NewGame();g.RecordScores=false;g.BeginIntro();Check(g.State==GameState.Intro,"first intro plays");g.SkipIntro();Check(g.State==GameState.Playing&&!g.View.GetComponent<FollowCamera>().Touring&&Campaign.Data.introSeen,"intro skip settles camera and persists");
                 Check(g.Training&&g.Tutorial.Step==TutorialStep.Move,"new campaign starts movement training");g.Player.ModuloShot();g.Player.DashInversion();Check(g.Player.ShotsFired==0&&g.Player.DashesUsed==0,"early actions cannot break arithmetic lesson");keyboard=InputSystem.AddDevice<Keyboard>();Keys(Key.W);Next(.22f);break;
             case 1:
-                Keys();Check(g.Tutorial.Step==TutorialStep.Lucky,"actual movement advances lesson");Check(g.Orbs.Active.Count==1&&g.Orbs.Active[0].Operand==6,"only +6 training orb");orbPosition=g.Orbs.Active[0].transform.position;Check(g.Elapsed==0&&g.RuleTime==15,"training holds combat clock and rule");Next(.4f);break;
+                Keys();Check(g.Tutorial.Step==TutorialStep.Lucky,"actual movement advances lesson");Check(g.Orbs.Active.Count==1&&g.Orbs.Active[0].Operand==2,"counting lesson starts with one +2 orb");orbPosition=g.Orbs.Active[0].transform.position;Check(g.Elapsed==0&&g.RuleTime==15,"training holds combat clock and rule");Next(.4f);break;
             case 2:
-                Check(Vector3.Distance(orbPosition,g.Orbs.Active[0].transform.position)<.01f,"lesson orb stays still");Check(g.Encounters.ActiveMinions==0&&g.Encounters.ActiveObstacles==0,"encounters held during training");g.Player.transform.position=orbPosition;Next(.3f);break;
+                Check(Vector3.Distance(orbPosition,g.Orbs.Active[0].transform.position)<.01f,"lesson orb stays still");Check(g.Encounters.ActiveMinions==0&&g.Encounters.ActiveObstacles==0,"encounters held during training");g.Player.transform.position=orbPosition;stage=20;Next(.5f);break;
+            case 21:
+                Check(g.Player.CurrentValue==3&&g.Orbs.Active.Count==1&&g.Orbs.Active[0].Operand==4,"1 + 2 = 3, then the missing +4 appears");g.Player.transform.position=g.Orbs.Active[0].transform.position;stage=2;Next(.3f);break;
             case 3:
-                Check(g.Tutorial.Step==TutorialStep.Celebrate,"collecting +6 makes Lucky");Check(g.Player.CurrentValue==1&&g.Boss.Health==80,"Lucky resets value and visibly damages boss");Next(1.7f);break;
+                Check(g.Tutorial.Step==TutorialStep.Celebrate,"counting 1 + 2 + 4 = 7 makes Lucky");Check(g.Player.CurrentValue==1&&g.Boss.Health==80,"Lucky resets value and visibly damages boss");Next(1.7f);break;
             case 4:
                 Check(g.Tutorial.Step==TutorialStep.Fire,"fire lesson follows reward");Keys(Key.J);Next(.65f);break;
             case 5:

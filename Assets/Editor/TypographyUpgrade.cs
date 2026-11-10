@@ -12,8 +12,8 @@ using TMPro;
 using CountToZero;
 public static class TypographyUpgrade
 {
-    public static TMP_FontAsset BodyFont=>AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/Fonts/Body SDF.asset");
-    public static TMP_FontAsset TitleFont=>AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/Fonts/Title SDF.asset");
+    public static TMP_FontAsset BodyFont=>AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/PixelUISciFiFree/Font/Pixel UI Sci-Fi TMP.asset");
+    public static TMP_FontAsset TitleFont=>AssetDatabase.LoadAssetAtPath<TMP_FontAsset>("Assets/PixelUISciFiFree/Font/Pixel UI Sci-Fi TMP.asset");
     static TMP_FontAsset Font(string source,string path)
     {
         var existing=AssetDatabase.LoadAssetAtPath<TMP_FontAsset>(path);if(existing!=null)return existing;
@@ -81,7 +81,7 @@ public static class TypographyUpgrade
     {
         try{
             if(TMP_Settings.instance==null)throw new InvalidOperationException("Import the included Assets/TextMesh Pro/Resources/TMP Settings.asset before running the upgrade.");
-            Font("Assets/Fonts/2005_iannnnnAMD.ttf","Assets/Fonts/Body SDF.asset");var title=Font("Assets/Fonts/ZF#2ndPixelus.ttf","Assets/Fonts/Title SDF.asset");title.fallbackFontAssetTable=new List<TMP_FontAsset>{BodyFont};EditorUtility.SetDirty(title);AssetDatabase.SaveAssets();
+            AssetDatabase.SaveAssets();
             foreach(string name in new[]{"Title","Preload","Story","CountToZero","TurnEnd","StoryEnd"}){
                 string path="Assets/Scenes/"+name+".unity";string raw=File.ReadAllText(path);var scene=EditorSceneManager.OpenScene(path);var roots=scene.GetRootGameObjects();Convert(roots,raw);
                 if(name=="CountToZero"){

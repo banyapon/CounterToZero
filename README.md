@@ -90,7 +90,7 @@ Editor: `Count To Zero / Build Campaign Scenes` authors missing scenes and wires
 
 ## Typography and HP bars
 
-All game scenes and number-orb labels use TextMeshPro. Body text uses `Assets/Fonts/Body SDF.asset` generated from `2005_iannnnnAMD.ttf`; headings use `Title SDF.asset` generated from `ZF#2ndPixelus.ttf`. Both include bold styling and dark outlines. Source fonts remain embedded for dynamic glyph support.
+All game scenes and number-orb labels use TextMeshPro. Body text uses `Assets/PixelUISciFiFree/Font/Pixel UI Sci-Fi TMP.asset`, scaled to 39.365% of the previous body-font sizes to preserve cap height. Headings also use Pixel UI Sci-Fi TMP, scaled to 114.286% of the previous title size to preserve cap height. The retired font sources and generated Body/Title assets are archived outside Assets and are not build dependencies.
 
 Player, boss and all six pooled minions have authored world-space `HP Bar` children with current/max HP. The player also has an HP bar in the HUD, and the boss HUD bar is thicker with larger numbers. Boss arithmetic value is labeled VALUE separately. Edit dimensions, colors and font sizes directly in Hierarchy/Inspector.
 

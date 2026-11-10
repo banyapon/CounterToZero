@@ -1,2 +1,3 @@
-PASS: 136 checks. Authored audio in six scenes, 9 cues and 3 synchronized stems; input-driven tutorial movement/fire/dash, real +6 pickup, safe practice, pause, saved completion/skip, clean live start, cut-in protection, death explanation, immediate same-scene retry, first-only intro, UI navigation isolation, bounded adaptation and volume settings.
-Human fun/readability testing and mobile WebGL testing remain external checks.
+FAIL: System.Exception: synchronized loop length
+  at PlayabilityChecks.Check (System.Boolean pass, System.String name) [0x00016] in D:\GitHub\Unity\CounterToZero\Assets\Editor\PlayabilityChecks.cs:20 
+  at PlayabilityChecks.Run () [0x001ad] in D:\GitHub\Unity\CounterToZero\Assets\Editor\PlayabilityChecks.cs:26 

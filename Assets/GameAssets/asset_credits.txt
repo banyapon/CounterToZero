@@ -10,9 +10,7 @@ Fenerax Studios
 https://assetstore.unity.com/packages/tools/input-management/joystick-pack-107631
 
 GravityBold8: JohnWatson
-ZF #2ndPixelus: Chayanon Ruamcharoen (2005)
-2005_iannnnnAMD: Prachya Singhto / iannnnn (2005)
-Font metadata on the latter two states: For educations used only.
+Pixel UI Sci-Fi TMP: included with Pixel UI Sci-Fi Free by HeyHeyThere.
 Liberation Sans: Steve Matteson / Ascender; Google (2010), Red Hat (2012). SIL OFL 1.1.
 
 Character source sheets (man/1, man/8 and supplied variants): supplied with this project; original creator not identified in local metadata.

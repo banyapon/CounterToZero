@@ -56,7 +56,9 @@ namespace CountToZero
             CountingDown=false;
             State=GameState.Playing;
             if(Campaign.Active){Campaign.Data.introSeen=true;Campaign.Save();}
-            Dialogue.Say("intro");
+            var stop=WorldTour.Current;
+            Dialogue.Say("OMEGA-99",stop.Threat,3.6f);Dialogue.Queue("GLITCH-0",stop.Reply,2.6f);
+            if(Unlocks.NewMechanic!=null)Feedback.Announce(Unlocks.NewMechanic,ArenaVisuals.Gold);
         }
         public void Begin()
         {
@@ -64,7 +66,7 @@ namespace CountToZero
             DamageTaken=0; Score = new ScoreManager(); Phase = 1; Elapsed = 0; SlowUntil = HazardUntil = 0;
             GetComponent<BattleExpansion>()?.ResetBattle();
             Bullets.Clear(); Orbs.Clear(); Player.ResetRun(); Boss.ResetRun(); if(Campaign.Active)Boss.SelectPattern(Campaign.PatternIndex); Encounters.ResetRun(); CutIn.Clear();
-            Feedback.ResetFeedback(); Rule = LuckyRuleEngine.Create(RuleType.ExactMatch,7); RuleTime = 15;
+            Feedback.ResetFeedback(); Rule = LuckyRuleEngine.Create(RuleType.ExactMatch,WorldTour.Current.Lucky); RuleTime = 15;
             State = GameState.Intro; Time.timeScale = 1;
             View.GetComponent<FollowCamera>().Snap();
             Orbs.SeedOpening(); Tutorial?.ResetForRun(); Hazards?.ResetRun(); hazard.gameObject.SetActive(false); Feedback.Announce("BREACH THE DETERMINISTIC CORE", ArenaVisuals.Cyan);
@@ -95,7 +97,11 @@ namespace CountToZero
         }
         public void ShiftRule()
         {
-            Rule = Rules.GenerateNewRule(Phase); RuleTime = 15;
+            int lucky=WorldTour.Current.Lucky;
+            if(!Unlocks.RuleVariety)Rule=LuckyRuleEngine.Create(RuleType.ExactMatch,Random.value<.5f&&lucky<=13?lucky:Random.Range(2,13));
+            else if(!Unlocks.AdvancedRules)Rule=Random.value<.4f?LuckyRuleEngine.Create(RuleType.ExactMatch,lucky<=13?lucky:Random.Range(2,13)):LuckyRuleEngine.Create(Random.value<.5f?RuleType.EvenNumber:RuleType.OddNumber);
+            else Rule = Rules.GenerateNewRule(Phase);
+            RuleTime = 15;
             Feedback.Announce("RULE SHIFT  /  " + Rule.Label, ArenaVisuals.Gold);
         }
         public void Match(NumberCarrier carrier)
@@ -103,7 +109,8 @@ namespace CountToZero
             if (State != GameState.Playing) return;
             bool player = carrier == Player;
             bool exact = Rule.Type == RuleType.ExactMatch;
-            Feedback.Lucky(carrier.transform.position, player);
+            Feedback.Lucky(carrier.transform.position, player, exact ? "LUCKY " + carrier.CurrentValue + "!" : null);
+            if (player && exact) GameAudio.Play(SoundCue.Jackpot);
             if (player)
             {
                 Player.ProtectCutIn(); CutIn.Show(); Tutorial?.LuckyMatched(); Dialogue.Say("lucky");
@@ -170,7 +177,7 @@ namespace CountToZero
             if(!won)GameAudio.Play(SoundCue.Death);
             if(Campaign.Active){Campaign.LastCause=Player.LastDamageCause;Campaign.Complete(won,Elapsed,DamageTaken,Score.Score);}
             if(won)StartCoroutine(ShowVictory());
-            if (RecordScores && Score.Score > best) { PlayerPrefs.SetInt(BestScoreKey, Score.Score); PlayerPrefs.Save(); }
+            if (RecordScores && Score.Score > best) { PlayerPrefs.SetInt(BestScoreKey, Score.Score); PlayerPrefs.Save(); CloudRanks.Submit(Score.Score); }
         }
         System.Collections.IEnumerator ShowVictory()
         {

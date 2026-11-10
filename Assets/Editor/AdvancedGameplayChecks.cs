@@ -43,7 +43,7 @@ public static class AdvancedGameplayChecks
             {
                 case 0:
                     oldUp=g.Controls.GetBinding(0);g.Controls.PersistBindings=false;Campaign.Leave();g.RecordScores=false;g.Begin();g.Boss.CrashUntil=Time.time+100;g.Orbs.Clear();
-                    Check(g.Dialogue.CurrentId=="intro","English JSON introduction");
+                    Check(g.Dialogue.CurrentId=="custom","world-tour pre-fight line");
                     g.Player.ApplyMathOperation(MathOpType.Add,6);Check(g.CutIn.Visible,"Lucky cut-in triggers");
                     g.Begin();g.Boss.CrashUntil=Time.time+100;g.Orbs.Clear();
                     for(int i=0;i<6;i++){g.Boss.SelectPattern(i);Check(g.Boss.PatternIndex==i&&!string.IsNullOrEmpty(g.Boss.PatternName),"pattern asset "+i);}

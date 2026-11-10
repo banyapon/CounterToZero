@@ -80,9 +80,9 @@ namespace CountToZero
         {
             var g=GameManager.Instance;if(g.State!=GameState.Playing||g.Training)return;
             if(g.Elapsed>=healAt){healAt=g.Elapsed+18;DropHealth(new Vector3(Random.Range(-7f,7f),0,Random.Range(-5f,2f)),true);}
-            if(g.Elapsed<eventAt)return;
+            if(!Unlocks.Minions||g.Elapsed<eventAt)return;
             eventAt=g.Elapsed+EventInterval;eventIndex++;GameAudio.Play(SoundCue.Warning);
-            if(eventIndex%3==1)
+            if(eventIndex%3==1||!Unlocks.BlockWaves)
             {
                 int count=Mathf.Min(6,1+DifficultyTier/2+(g.Phase>1?1:0));
                 for(int i=0;i<count;i++)SummonMinion();

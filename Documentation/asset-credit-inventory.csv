@@ -72,12 +72,12 @@ Assets\GameAssets\Sprites\man\8walk_heavy.png,See Assets/GameAssets/asset_credit
 Assets\GameAssets\Sprites\man\8walk_scout.png,See Assets/GameAssets/asset_credits.txt; supplied source art/audio without attribution explicitly unresolved
 Assets\GameAssets\Sprites\man\assistant_gold.png,See Assets/GameAssets/asset_credits.txt; supplied source art/audio without attribution explicitly unresolved
 Assets\GameAssets\Sprites\man\assistant_green.png,See Assets/GameAssets/asset_credits.txt; supplied source art/audio without attribution explicitly unresolved
-Assets\Fonts\2005_iannnnnAMD.ttf,See Assets/GameAssets/asset_credits.txt; supplied source art/audio without attribution explicitly unresolved
-Assets\Fonts\Body SDF.asset,See Assets/GameAssets/asset_credits.txt; supplied source art/audio without attribution explicitly unresolved
+Backup/RetiredIannnnnFont/2005_iannnnnAMD.ttf,Retired from Assets; excluded from builds
+Backup/RetiredIannnnnFont/Body SDF.asset,Retired generated font; excluded from builds
 Assets\Fonts\GravityBold8.ttf,See Assets/GameAssets/asset_credits.txt; supplied source art/audio without attribution explicitly unresolved
 Assets\Fonts\GravityBold8.txt,See Assets/GameAssets/asset_credits.txt; supplied source art/audio without attribution explicitly unresolved
-Assets\Fonts\Title SDF.asset,See Assets/GameAssets/asset_credits.txt; supplied source art/audio without attribution explicitly unresolved
-Assets\Fonts\ZF#2ndPixelus.ttf,See Assets/GameAssets/asset_credits.txt; supplied source art/audio without attribution explicitly unresolved
+Backup/RetiredZFFont/Title SDF.asset,See Assets/GameAssets/asset_credits.txt; supplied source art/audio without attribution explicitly unresolved
+Backup/RetiredZFFont/ZF#2ndPixelus.ttf,See Assets/GameAssets/asset_credits.txt; supplied source art/audio without attribution explicitly unresolved
 Assets\PixelUISciFiFree\Documentation.txt,See Assets/GameAssets/asset_credits.txt; supplied source art/audio without attribution explicitly unresolved
 Assets\PixelUISciFiFree\Cursors\cursor.png,See Assets/GameAssets/asset_credits.txt; supplied source art/audio without attribution explicitly unresolved
 Assets\PixelUISciFiFree\Cursors\cursor_2x.png,See Assets/GameAssets/asset_credits.txt; supplied source art/audio without attribution explicitly unresolved

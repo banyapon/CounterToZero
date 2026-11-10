@@ -34,7 +34,7 @@ namespace CountToZero
         public void SpawnTraining(Vector3 point,MathOpType op,int value){Spawn(point,op,value);Active[Active.Count-1].Training=true;}
         public void SeedOpening()
         {
-            foreach (var point in openingOrbs) Spawn(point.transform.position, point.Operation, point.Operand);
+            foreach (var point in openingOrbs) if(Unlocks.AdvancedOrbs||point.Operation==MathOpType.Add||point.Operation==MathOpType.Subtract) Spawn(point.transform.position, point.Operation, point.Operand);
         }
         void Update()
         {
@@ -55,7 +55,8 @@ namespace CountToZero
         {
             if (Mathf.Abs(GameManager.Instance.Player.CurrentValue)>50 && Random.value<.45f)
             { op=Random.value<.5f?MathOpType.Modulo:MathOpType.Set; value=op==MathOpType.Modulo?10:1; return; }
-            int roll=Random.Range(0,12);
+            int roll=Random.Range(0,Unlocks.AdvancedOrbs?12:8);
+            if(roll>=10&&!Unlocks.Jinx)roll=Random.Range(0,8);
             op=roll<4?MathOpType.Add:roll<8?MathOpType.Subtract:roll==8?MathOpType.Multiply:roll==9?MathOpType.Divide:MathOpType.Jinx;
             int[] numbers={1,2,3,5}; value=roll<8?numbers[Random.Range(0,4)]:2;
         }
