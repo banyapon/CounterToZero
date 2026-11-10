@@ -1,22 +1,22 @@
 # Count to Zero
+A pixel art Bullet Hell game combined with arithmetic mechanics. Collect numbers matching the Lucky Rule to attack the boss across 30 stages, then continue in Infinite Mode!
 
-เกม Pixel Art แนว Bullet Hell ผสมการคิดเลข เก็บตัวเลขให้ตรง Lucky Rule เพื่อโจมตี Boss ผ่าน 30 ด่าน แล้วเล่นต่อในโหมด Infinite
+##Getting Started
+Open the project in Unity 6000.6.7f1, open Assets/Scenes/Title.unity, and hit Play.
 
-## เริ่มเล่น
+**WASD / Arrow Keys**: Move
 
-เปิดด้วย Unity **6000.6.7f1** แล้วเปิด `Assets/Scenes/Title.unity` และกด Play
+J: Shoot the nearest enemy, or use the mouse to aim and Left-Click to shoot
 
-- **WASD / ลูกศร:** เดิน
-- **J:** ยิงศัตรูที่ใกล้ที่สุด หรือใช้เมาส์เล็งแล้วคลิกซ้ายยิง
-- **Space:** Slide · **E:** Focus · **Esc:** พักเกม
+Space: Slide · E: Focus · Esc: Pause
 
-รองรับ Gamepad และปุ่มสัมผัสบนมือถือ
+Gamepad and mobile touch controls are fully supported.
 
-## Build
+##Build
+Select **Count To Zero → Build → PC and itch.zip** from the top menu. The output files will be saved in `Builds/`:
 
-เลือก **Count To Zero → Build → PC and itch.zip** ไฟล์อยู่ใน `Builds/`:
+`CountToZero-PC.zip` — Windows 64-bit build
 
-- `CountToZero-PC.zip` — Windows 64-bit
-- `itch.zip` — WebGL สำหรับ itch.io
+`itch.zip` — WebGL build for itch.io
 
-เครดิต Assets: `Assets/GameAssets/asset_credits.txt`
+Asset Credits: `Assets/GameAssets/asset_credits.txt`
