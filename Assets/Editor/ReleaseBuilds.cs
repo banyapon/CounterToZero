@@ -65,8 +65,12 @@ public static class ReleaseBuilds
             }
             RemoveEditorOnlyTextShader();
             ConfigureCursor();
+            PlayerSettings.fullScreenMode = FullScreenMode.FullScreenWindow;
+            PlayerSettings.defaultIsNativeResolution = true;
             if (web)
             {
+                PlayerSettings.WebGL.template = "PROJECT:CountToZeroPWA";
+                PlayerSettings.WebGL.nameFilesAsHashes = true;
                 PlayerSettings.WebGL.compressionFormat = WebGLCompressionFormat.Gzip;
                 PlayerSettings.WebGL.decompressionFallback = true;
                 PlayerSettings.WebGL.threadsSupport = false;
@@ -81,7 +85,7 @@ public static class ReleaseBuilds
             {
                 scenes = scenes, locationPathName = output, target = target,
                 subtarget = web ? 0 : (int)StandaloneBuildSubtarget.Player,
-                options = BuildOptions.CleanBuildCache
+                options = BuildOptions.None
             });
             File.AppendAllText(Status, target + ": " + report.summary.result + ", errors=" + report.summary.totalErrors + "\n");
             if (report.summary.result != BuildResult.Succeeded)
@@ -95,6 +99,26 @@ public static class ReleaseBuilds
                 if (File.Exists("Builds/itch.zip")) File.Delete("Builds/itch.zip");
                 File.Move(temporaryZip, "Builds/itch.zip");
                 File.AppendAllText(Status, "Packaged Builds/itch.zip (index.html at archive root)\n");
+                File.Copy("Builds/itch.zip", "Builds/UnityPlay.zip", true);
+                File.AppendAllText(Status, "Packaged Builds/UnityPlay.zip (same WebGL build)\n");
+            }
+            else
+            {
+                const string pcZip = "Builds/CountToZero-PC.zip";
+                const string pending = "Builds/CountToZero-PC.pending.zip";
+                if (File.Exists(pending)) File.Delete(pending);
+                using (var archive = ZipFile.Open(pending, ZipArchiveMode.Create))
+                {
+                    foreach (var file in Directory.GetFiles("Builds/PC", "*", SearchOption.AllDirectories))
+                    {
+                        var relative = Path.GetRelativePath("Builds/PC", file).Replace('\\', '/');
+                        if (relative.Split('/').Any(part => part.Contains("BackUpThisFolder_ButDontShipItWithYourGame"))) continue;
+                        archive.CreateEntryFromFile(file, relative, System.IO.Compression.CompressionLevel.Optimal);
+                    }
+                }
+                if (File.Exists(pcZip)) File.Delete(pcZip);
+                File.Move(pending, pcZip);
+                File.AppendAllText(Status, "Packaged " + pcZip + "\n");
             }
             if (queue.Length > 1) File.WriteAllLines(Request, queue.Skip(1));
             else { File.Delete(Request); File.AppendAllText(Status, "DONE\n"); }

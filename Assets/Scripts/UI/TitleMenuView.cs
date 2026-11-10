@@ -50,7 +50,17 @@ namespace CountToZero
                 if(selected!=null)EventSystem.current.SetSelectedGameObject(selected.gameObject);
             }
             if((Keyboard.current!=null&&Keyboard.current.escapeKey.wasPressedThisFrame)||(Gamepad.current!=null&&Gamepad.current.buttonEast.wasPressedThisFrame))
-            {if(credits.activeSelf)BackFromCredits();else if(!home.activeSelf)ReturnHome();}
+            {if(credits.activeSelf)BackFromCredits();else if(!home.activeSelf)ReturnHome();else if(Keyboard.current!=null&&Keyboard.current.escapeKey.wasPressedThisFrame)QuitGame();}
+        }
+        // ESC on the first title page closes the game (sub-pages still step back first).
+        public static void QuitGame()
+        {
+            PlayerPrefs.Save();
+#if UNITY_EDITOR
+            UnityEditor.EditorApplication.isPlaying=false;
+#else
+            Application.Quit();
+#endif
         }
     }
 }

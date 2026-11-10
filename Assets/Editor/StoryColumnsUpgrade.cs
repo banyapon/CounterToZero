@@ -70,7 +70,7 @@ public static class StoryColumnsUpgrade
             for(int i=0;i<labels.Length;i++)
             {
                 if(AssetDatabase.GetAssetPath(labels[i].font)!="Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF.asset")continue;
-                var pixel=AssetDatabase.LoadAssetAtPath<TMPro.TMP_FontAsset>(i<2?"Assets/PixelUISciFiFree/Font/Pixel UI Sci-Fi TMP.asset":"Assets/Fonts/Body SDF.asset");
+                var pixel=AssetDatabase.LoadAssetAtPath<TMPro.TMP_FontAsset>("Assets/PixelUISciFiFree/Font/Pixel UI Sci-Fi TMP.asset");
                 labels[i].font=pixel;labels[i].fontSharedMaterial=pixel.material;
             }
             for(int i=0;i<labels.Length;i++){string key="StoryColumns.Font."+screen.Page+"."+i;SessionState.SetString(key,AssetId(labels[i].font));SessionState.SetString(key+".Material",AssetId(labels[i].fontSharedMaterial));}

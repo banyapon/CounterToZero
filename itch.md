@@ -104,8 +104,7 @@ The Aseprite source files are included in the project (`ArtSource/`).
 
 | Font | Author / License |
 |---|---|
-| 2005_iannnnnAMD (main UI font) | Prachya Singhto / iannnnn (2005) |
-| ZF #2ndPixelus | Chayanon Ruamcharoen (2005) |
+| Pixel UI Sci-Fi TMP (main UI font) | HeyHeyThere / Pixel UI Sci-Fi Free |
 | GravityBold8 | John Watson |
 | Liberation Sans | Steve Matteson / Ascender; Google, Red Hat. SIL OFL 1.1 |
 

@@ -40,7 +40,7 @@ namespace CountToZero
             lr.anchorMin = lr.anchorMax = lr.pivot = new Vector2(.5f, 0); lr.anchoredPosition = new Vector2(0, 3);
             var code = lr.gameObject.AddComponent<TextMeshProUGUI>();
             if (font != null) code.font = font;
-            code.fontSize = 15; code.alignment = TextAlignmentOptions.Center; code.raycastTarget = false;
+            code.fontSize = PixelTypography.Size(code,15); code.alignment = TextAlignmentOptions.Center; code.raycastTarget = false;
             code.color = style == 0 ? new Color(.45f, 1f, .55f) : new Color(1f, .85f, .35f);
             code.text = (style == 0 ? "AST-G" : "AST-B") + number.ToString("00");
             card.code = code;
