@@ -111,3 +111,6 @@ InitTestScene*.unity*
 /[Dd]ocumentation/
 /itch.md
 /.vscode/
+
+# Local Python tooling
+/Tools/**/*.py
