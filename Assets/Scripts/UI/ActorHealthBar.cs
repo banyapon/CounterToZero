@@ -11,6 +11,14 @@ namespace CountToZero
         [SerializeField] Image fill;
         [SerializeField] TMP_Text value;
         public float Fraction {get;private set;}
+        void Awake()
+        {
+            if (boss == null) return;
+            var canvas = GetComponent<Canvas>();
+            if (canvas == null) return;
+            canvas.overrideSorting = true;
+            canvas.sortingOrder = 30;
+        }
         void LateUpdate(){Refresh();}
         public void Refresh()
         {

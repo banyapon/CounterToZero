@@ -33,6 +33,7 @@ namespace CountToZero
             if(Game.State==GameState.Victory || Game.State==GameState.Won)return;
             sprite.color = Invulnerable && Mathf.Sin(Time.unscaledTime*40)>0 ? Color.white : OverchargeUntil > Time.time ? ArenaVisuals.Green : Color.white;
             if (Game.State != GameState.Playing) return;
+            if (TryGetComponent<HeroAnimator>(out var hero)) hero.LookAt(AimPoint());
             if(!Game.CutIn.Visible)cutInProtection=Mathf.Max(0,cutInProtection-Time.unscaledDeltaTime);
             var controls = Game.Controls;
             Vector3 movement = controls.WorldDirection(controls.Move);
@@ -59,6 +60,11 @@ namespace CountToZero
             if (Time.time < shotReady) return;
             ShotsFired++;GameAudio.Play(SoundCue.Shoot);
             bool charged = Time.time < OverchargeUntil; shotReady = Time.time + (charged ? .095f : .18f);
+            Vector3 aim = AimPoint();
+            Game.Bullets.Fire(transform.position,(aim-transform.position).normalized,false,16,charged);
+        }
+        public Vector3 AimPoint()
+        {
             Vector3 aim = Game.Encounters.AutoAim(transform.position);
             if (Game.Controls.StickAim.sqrMagnitude > .01f) aim=transform.position+Game.Controls.WorldDirection(Game.Controls.StickAim)*15;
             else if (Game.Controls.MouseAiming && Mouse.current != null)
@@ -66,7 +72,7 @@ namespace CountToZero
                 var ray = Game.View.ScreenPointToRay(Mouse.current.position.ReadValue());
                 if (new Plane(Vector3.up, Vector3.zero).Raycast(ray,out float distance)) aim = ray.GetPoint(distance);
             }
-            Game.Bullets.Fire(transform.position,(aim-transform.position).normalized,false,16,charged);
+            return aim;
         }
         public void Hurt(bool unavoidable = false,string cause="Enemy projectile")
         {

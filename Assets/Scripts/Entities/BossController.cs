@@ -9,7 +9,10 @@ namespace CountToZero
         public string PhaseName => Game.Phase == 1 ? "THE SENTINEL" : Game.Phase == 2 ? "SPIRAL PROTOCOL" : "ENTROPY ENGINE";
         public bool Sucking => !Game.Training && Game.Elapsed % 9 > 5 && Time.time >= CrashUntil;
         [SerializeField] BossPatternDefinition[] patterns;
-        float fireAt, angle, patternUntil, blockedUntil, blockedHintUntil, blockedFlashUntil;
+        float fireAt, angle, patternUntil, blockedUntil, blockedHintUntil, blockedFlashUntil, hitFlashUntil;
+        public bool HitFlashing => Time.unscaledTime < hitFlashUntil;
+        public Color HitFlashColor => Color.Lerp(Color.white, ArenaVisuals.Red, Mathf.PingPong(Time.unscaledTime * 22f, 1f));
+        public void FlashHit() { hitFlashUntil = Time.unscaledTime + .18f; }
         int patternIndex;
         public string PatternName => patterns[patternIndex].displayName;
         public int PatternIndex => patternIndex;
@@ -30,7 +33,7 @@ namespace CountToZero
         void Awake() { visualOrigin = sprite.transform.localPosition; ResetRun(); }
         public void ResetRun()
         {
-            blockedUntil=blockedHintUntil=blockedFlashUntil=0;Health = 99; ShieldUntil = CrashUntil = fireAt = angle = 0;
+            blockedUntil=blockedHintUntil=blockedFlashUntil=hitFlashUntil=0;Health = 99; ShieldUntil = CrashUntil = fireAt = angle = 0;
             SetValue(50); transform.position = spawnPoint.position; patternIndex=0;patternUntil=7;
             GetComponent<BossForm>()?.ResetRun();
         }
@@ -39,7 +42,7 @@ namespace CountToZero
         void Update()
         {
             label.text = "VALUE " + CurrentValue;
-            sprite.color = Time.unscaledTime<blockedFlashUntil?Color.white:LuckyNumberOnly?ArenaVisuals.Gold:CrashUntil > Time.time ? ArenaVisuals.Green : ShieldUntil > Time.time ? ArenaVisuals.Violet : ArenaVisuals.Red;
+            sprite.color = HitFlashing ? HitFlashColor : Time.unscaledTime<blockedFlashUntil?Color.white:LuckyNumberOnly?ArenaVisuals.Gold:CrashUntil > Time.time ? ArenaVisuals.Green : ShieldUntil > Time.time ? ArenaVisuals.Violet : ArenaVisuals.Red;
             if (Game.State != GameState.Playing || Game.Training || Time.time < CrashUntil) return;
             if(!Campaign.Active && Game.Elapsed>=patternUntil) SelectPattern(patternIndex+1);
             var pattern=patterns[patternIndex];float t=Game.Elapsed;

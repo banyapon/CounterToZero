@@ -156,7 +156,9 @@ namespace CountToZero
                 Bullets.Fire(Boss.transform.position, (Player.transform.position - Boss.transform.position).normalized, true, 7);
                 return;
             }
-            Boss.Health = Mathf.Max(Training?70:0, Boss.Health - amount * (Boss.CrashUntil > Time.time ? 2 : 1));
+            float before = Boss.Health;
+            Boss.Health = Mathf.Max(Training?70:0, before - amount * (Boss.CrashUntil > Time.time ? 2 : 1));
+            if (Boss.Health < before) Boss.FlashHit();
             if (Boss.Health > 99 - Phase * 33) return;
             Score.CompletePhase();
             if (Phase == 3) { Finish(true); return; }

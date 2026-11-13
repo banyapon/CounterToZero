@@ -31,7 +31,7 @@ namespace CountToZero
         [Header("Walkers (minion robots x4)")]
         [SerializeField] Sprite[] walkFronts, walkBacks, heavyFronts, heavyBacks, scoutFronts, scoutBacks;
         [SerializeField] float giantRobotScale = 2; // giants = 8walk_heavy (flail) / 8walk_scout (storm) at x2
-        [SerializeField] float walkerScale = 3.4f, walkerFps = 6;
+        [SerializeField] float walkerScale = 2f, walkerFps = 6;
         float walkClock, omegaY;
         [Header("Armored Omega")]
         [SerializeField] Material laserMaterial;
@@ -119,7 +119,8 @@ namespace CountToZero
             omega.enabled = !serpent && !isGiant && !walker;
             omega.sprite = Shape == BossShape.Skull && skull != null ? skull : omegaSprite;
             // Omega is tinted hard (state colours); drawn bosses keep their palette and only take a hint of it.
-            var tint = Color.Lerp(Color.white, omega.color, .35f);
+            // A landed shot replaces that hint with a full red flash so the walker reads the hit.
+            var tint = boss.HitFlashing ? boss.HitFlashColor : Color.Lerp(Color.white, omega.color, .35f);
             if (Shape == BossShape.Skull) omega.color = tint;
             head.enabled = serpent;
             // BattleExpansion owns damageable segments during the snake pattern; ours are decorative.
@@ -158,7 +159,9 @@ namespace CountToZero
         void UpdateWalker(GameManager g, Color tint)
         {
             bool heavy = Shape == BossShape.HeavyWalker;
-            Robot(g, heavy ? heavyFronts : walkFronts, heavy ? heavyBacks : walkBacks, walkerScale * (heavy ? 1.1f : 1f), tint);
+            // 8walk at 3.4 is a 3.4-unit billboard and covers the HP bar (center at local y 3.75).
+            float size = Mathf.Min(walkerScale, 2f) * (heavy ? 1.1f : 1f);
+            Robot(g, heavy ? heavyFronts : walkFronts, heavy ? heavyBacks : walkBacks, size, tint);
         }
 
         /// Animated minion-robot sheet on the giant renderer, feet on the floor, front/back by facing.

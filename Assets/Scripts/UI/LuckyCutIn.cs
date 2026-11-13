@@ -13,7 +13,12 @@ namespace CountToZero
         public bool Visible => remaining>0;
         public void Show(){remaining=duration;panel.gameObject.SetActive(true);}
         public void Clear(){remaining=0;panel.gameObject.SetActive(false);}
-        void Awake(){Clear();}
+        void Awake()
+        {
+            if (portrait != null) portrait.rectTransform.sizeDelta = new Vector2(110, 122);
+            if (panel != null) panel.sizeDelta = new Vector2(panel.sizeDelta.x, 136);
+            Clear();
+        }
         void Update()
         {
             if(remaining<=0)return;
