@@ -115,3 +115,7 @@ InitTestScene*.unity*
 
 # Local tooling
 /Tools/
+
+# Lua source scripts
+*.lua
+*.lua.meta
